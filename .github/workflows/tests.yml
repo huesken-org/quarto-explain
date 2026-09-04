@@ -1,0 +1,35 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Pinned because the golden files record real output: Quarto's HTML and
+      # LaTeX writers shape every expected.txt. A version bump is fine, it just
+      # needs a reviewed `tests/run.sh --update` in the same commit.
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+
+      - name: Versions
+        run: |
+          quarto --version
+          quarto pandoc --version | head -1
+
+      # manim and ffmpeg are not installed: tests/bin/ holds stubs that create
+      # exactly the files manim.lua looks for.
+      # jsdom is only needed by tests/fragment-order.js, which replays the
+      # runtime fragment sort. Without it run.sh skips that part.
+      - name: Install the test-only JS dependency
+        run: npm install --prefix tests --no-audit --no-fund
+
+      - name: Run tests
+        run: tests/run.sh
