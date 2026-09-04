@@ -1,0 +1,29 @@
+---
+format: latex
+filters: [explain, stepper]
+title: two goroutines in the handout
+---
+
+## Concurrent
+
+::: {.explain-parallel-code}
+```{.go filename="Goroutine 1"}
+mu.Lock()
+score++
+mu.Unlock()
+```
+
+```{.go filename="Goroutine 2"}
+mu.Lock()
+fmt.Println(score)
+mu.Unlock()
+```
+
+:::: {lines1="1" lines2="1"}
+Both want the lock.
+::::
+
+:::: {lines1="2-3"}
+The left one alone.
+::::
+:::

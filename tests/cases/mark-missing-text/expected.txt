@@ -1,0 +1,49 @@
+--- exit 1
+--- content 
+--- assets
+--- warnings
+pandoc 
+  to: revealjs
+  output-file: input.html
+  standalone: true
+  wrap: none
+  default-image-extension: png
+  html-math-method:
+    method: mathjax
+    url: >-
+      https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML-full
+  slide-level: 2
+  
+metadata
+  link-citations: true
+  width: 1050
+  height: 700
+  margin: 0.1
+  center: false
+  navigationMode: linear
+  controlsLayout: edges
+  controlsTutorial: false
+  hash: true
+  history: true
+  hashOneBasedIndex: false
+  fragmentInURL: false
+  transition: none
+  backgroundTransition: none
+  pdfSeparateFragments: false
+  lang: en
+  auto-stretch: true
+  title: a typo must not stay silent
+  
+
+=== code-mark: text not found: freeColumn ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col)
+  mark       : freeColumn
+
+  The search is literal, not a pattern. A typo, or did the code change?
+  A `;` that belongs to the search text is written `\\;` in the .qmd — two backslashes,
+  pandoc eats one while reading the attribute. A `|` needs nothing.
+  Without this check the slide would simply come out unmarked, and you would
+  find out while presenting.
+
+WARN: Error encountered when rendering files

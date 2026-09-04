@@ -1,0 +1,56 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">mark on a code-manim step</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="marks-reach-the-code-block" class="slide level2">
+<h2>Marks reach the code block</h2>
+<p><code>mark=</code> on a step of <code>.explain-code-manim</code> is collected into <code>mark-steps</code>, the same as in <code>.explain-code</code> — and so it also reaches code-mark’s build-time check.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row">
+<div class="explain-code-manim-animation quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="r-stack manim-stack">
+<div class="step no-transition" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_tree.mp4" type="video/mp4"></video>
+</div>
+<div class="step no-transition fragment" data-show-from="1" data-fragment-index="0">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_deep.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="explain-code-manim-code quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark-steps="depth int|depth-1" data-code-fragment-index="0" data-code-line-numbers="1|2"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a><span class="kw">func</span> minimax<span class="op">(</span>b <span class="op">*</span>Board<span class="op">,</span> depth <span class="dt">int</span><span class="op">)</span> <span class="dt">int</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>    <span class="cf">return</span> best<span class="op">(</span>b<span class="op">,</span> depth<span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>The entry point.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>The descent.</p>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+code-mark.css
+code-mark.js
+explain-revealjs.css
+explain.css
+manim.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

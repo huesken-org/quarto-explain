@@ -1,0 +1,62 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">animation on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-search" class="level2">
+<h2 class="anchored" data-anchor-id="the-search">The search</h2>
+<p>The section videos stay in place and cover each other; on the website that stacking is <code>manim.css</code> (<code>.manim-stack</code>), reveal’s <code>.no-transition</code> rules are not attached here.</p>
+<div class="stepper">
+<div>
+<div class="explain-manim-animation">
+<div class="r-stack manim-stack">
+<div class="step" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_board.mp4" type="video/mp4"></video>
+</div>
+<div class="step" data-show-from="1">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_window.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="step-control">
+<div class="step-choice" data-step="0">
+<div>
+<p>The board.</p>
+</div>
+</div>
+<div class="step-choice" data-step="1">
+<div>
+<p>The window moves along.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain.css
+manim.css
+stepper-video.js
+stepper.css
+stepper.js
+--- warnings

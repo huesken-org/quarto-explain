@@ -1,0 +1,111 @@
+/* Annotated code blocks (.explain-code on the website): code on top at its
+   natural height, numbered explanations underneath. Badges come from
+   explain-code.js. */
+
+.explain-annotated {
+	--explain-accent: #2780e3;
+	--explain-accent-soft: rgba(39, 128, 227, 0.13);
+	margin-bottom: 1.2em;
+}
+
+/* --- the badge ---------------------------------------------------------- */
+
+/* One object in two places: on the code line, and in front of its explanation.
+   explain-code.js highlights them together, so shape and hovered state are
+   declared once and only the placement differs below. */
+.explain-annotated .explain-marker,
+.explain-annotated .explain-annotation[data-index]::before {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.5em;
+	height: 1.5em;
+	border: 1px solid var(--explain-accent);
+	border-radius: 1em;
+	color: var(--explain-accent);
+	font-size: 0.72em;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* Consecutive badges for the same annotation (a range) stay quiet; only the
+   hovered pair fills in. */
+.explain-annotated .explain-marker.explain-active,
+.explain-annotated .explain-annotation.explain-active::before {
+	background: var(--explain-accent);
+	color: #fff;
+}
+
+/* --- badges in the code ------------------------------------------------- */
+
+.explain-annotated .explain-line {
+	border-radius: 0.2em;
+	transition: background-color 0.12s ease;
+}
+
+.explain-annotated .explain-line.explain-active {
+	background-color: var(--explain-accent-soft);
+}
+
+/* On the code line: spaced off the code, and inert to selection. */
+.explain-annotated .explain-marker {
+	margin-left: 0.6em;
+	padding: 0 0.35em;
+	background: transparent;
+	vertical-align: middle;
+	cursor: default;
+	user-select: none;
+	transition:
+		background-color 0.12s ease,
+		color 0.12s ease;
+}
+
+/* --- explanations below the code ---------------------------------------- */
+
+.explain-annotated .explain-annotations {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	margin-top: 0.7em;
+}
+
+.explain-annotated .explain-annotation {
+	display: grid;
+	grid-template-columns: 1.9em 1fr;
+	align-items: start;
+	gap: 0.15em;
+	padding: 0.25em 0.4em;
+	border-radius: 0.3em;
+	transition: background-color 0.12s ease;
+}
+
+/* In front of the explanation: nudged onto the first text line. */
+.explain-annotated .explain-annotation[data-index]::before {
+	content: attr(data-index);
+	margin-top: 0.25em;
+}
+
+.explain-annotated .explain-annotation.explain-active {
+	background-color: var(--explain-accent-soft);
+}
+
+.explain-annotated .explain-annotation > * {
+	grid-column: 2;
+}
+
+.explain-annotated .explain-annotation > :last-child {
+	margin-bottom: 0;
+}
+
+/* A step with no line reference: no badge, but flush with the numbered entries
+   above (0.4em padding + 1.9em column + 0.15em gap). */
+.explain-annotated .explain-annotation.no-marker {
+	display: block;
+	padding-left: 2.45em;
+}
+
+/* --- intro paragraph above the block ------------------------------------ */
+
+.intro + .explain-annotated {
+	margin-top: 0.4em;
+}

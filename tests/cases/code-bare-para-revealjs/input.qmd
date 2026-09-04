@@ -1,0 +1,28 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a bare paragraph is a step
+---
+
+## Connecting prose
+
+A paragraph written without a fenced div is an unstyled step — it highlights
+nothing, but it takes its place in the sequence. All four constructs treat it the
+same way; `.explain-code` used to drop it silently.
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {lines="1"}
+The search.
+::::
+
+A step of its own, with no line reference.
+
+:::: {lines="2"}
+The access.
+::::
+:::

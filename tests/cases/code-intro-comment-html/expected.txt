@@ -1,0 +1,49 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">intro and comment on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<div>
+<div class="intro">
+<p>A preliminary note — above the block on the website.</p>
+</div>
+<div class="explain-annotated">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fmt<span class="op">.</span>Println<span class="op">(</span><span class="st">"Player"</span><span class="op">,</span> p<span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="explain-annotations">
+<div class="explain-annotation" data-lines="1" data-index="1">
+<p>The call.</p>
+</div>
+</div>
+<div class="explain-comment">
+<p>A comment — pulled below the block on the website.</p>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain-code.css
+explain-code.js
+explain.css
+--- warnings

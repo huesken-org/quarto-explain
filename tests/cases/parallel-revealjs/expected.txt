@@ -1,0 +1,60 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">two goroutines</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="concurrent" class="slide level2">
+<h2>Concurrent</h2>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Goroutine 1</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="Goroutine 1" data-code-fragment-index="0" data-code-line-numbers="|1|2"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a>mu<span class="op">.</span>Lock<span class="op">()</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>score<span class="op">++</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a>mu<span class="op">.</span>Unlock<span class="op">()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Goroutine 2</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="Goroutine 2" data-code-fragment-index="0" data-code-line-numbers="|1|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb2-1"><a href="" aria-label="1"></a>mu<span class="op">.</span>Lock<span class="op">()</span></span>
+<span id="cb2-2"><a href="" aria-label="2"></a>fmt<span class="op">.</span>Println<span class="op">(</span>score<span class="op">)</span></span>
+<span id="cb2-3"><a href="" aria-label="3"></a>mu<span class="op">.</span>Unlock<span class="op">()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Both start at the same time.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Only one gets the lock.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>Only the left one carries on.</p>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

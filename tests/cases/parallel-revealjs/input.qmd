@@ -1,0 +1,33 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: two goroutines
+---
+
+## Concurrent
+
+::: {.explain-parallel-code}
+```{.go filename="Goroutine 1"}
+mu.Lock()
+score++
+mu.Unlock()
+```
+
+```{.go filename="Goroutine 2"}
+mu.Lock()
+fmt.Println(score)
+mu.Unlock()
+```
+
+:::: {}
+Both start at the same time.
+::::
+
+:::: {lines1="1" lines2="1"}
+Only one gets the lock.
+::::
+
+:::: {lines1="2"}
+Only the left one carries on.
+::::
+:::

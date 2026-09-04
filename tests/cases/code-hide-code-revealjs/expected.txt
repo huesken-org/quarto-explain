@@ -1,0 +1,48 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">hide-code</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="long-output" class="slide level2">
+<h2>Long output</h2>
+<div class="stepper">
+<div class="r-stack gravity-top">
+<div class="step fragment fade-out" data-hide-from="1" data-fragment-index="0">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a><span class="cf">for</span> i <span class="op">:=</span> <span class="kw">range</span> <span class="dv">3</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>    fmt<span class="op">.</span>Println<span class="op">(</span>i<span class="op">)</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>The loop.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="step fragment" data-show-from="1" data-fragment-index="0">
+<div class="explain-comment">
+<p>The output alone, without the code — its own layer in the r-stack.</p>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

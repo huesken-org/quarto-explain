@@ -1,0 +1,32 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: explain-code in the deck
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+func (b *Board) Drop(col int, p Player) error {
+	row := b.freeRow(col)
+	if row < 0 {
+		return ErrColumnFull
+	}
+	b.cells[row][col] = p
+	return nil
+}
+```
+
+:::: {lines="2"}
+Find a free row.
+::::
+
+:::: {lines="3-5"}
+Report a full column.
+::::
+
+:::: {lines="6-7"}
+Place the piece.
+::::
+:::

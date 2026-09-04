@@ -1,0 +1,11 @@
+---
+format: html
+filters: [code-mark]
+title: mark on the website
+---
+
+## Same attribute, same assets
+
+```{.go mark="Rows - 1"}
+row := Rows - 1
+```

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# Stub for `manim --save_sections main.py`.
+#
+# manim.lua calls manim in the render directory and afterwards looks for the
+# sections JSON under media/videos/main/. What the filter makes of its contents
+# — fragment indices, `<source>` URLs, still frames — is what is checked here;
+# the animation itself does not matter for that. This stub therefore creates the
+# same directory structure with empty videos, one section per
+# `self.next_section("…")` in the scene.
+set -eu
+
+src=${*: -1}
+[ -f "$src" ] || {
+	echo "manim-stub: '$src' does not exist" >&2
+	exit 1
+}
+
+scene=$(sed -n 's/^class \([A-Za-z_][A-Za-z0-9_]*\)(Scene).*/\1/p' "$src" | head -1)
+scene=${scene:-DefaultTemplate}
+
+dir="media/videos/main/700p60/sections"
+mkdir -p "$dir"
+
+# `self.next_section("name")` as well as `self.next_section(name="name")`
+names=$(sed -n 's/.*next_section([[:space:]]*\(name[[:space:]]*=[[:space:]]*\)\{0,1\}"\([^"]*\)".*/\2/p' "$src")
+# A scene without next_section is rendered by manim as a single section.
+[ -n "$names" ] || names=$scene
+
+i=0
+json="["
+while IFS= read -r name; do
+	video=$(printf '%s_%04d_%s.mp4' "$scene" "$i" "$name")
+	: >"$dir/$video"
+	[ "$i" -gt 0 ] && json="$json,"
+	json="$json{\"name\":\"$name\",\"type\":\"default.normal\",\"video\":\"$video\",\"width\":1344,\"height\":700}"
+	i=$((i + 1))
+done <<<"$names"
+json="$json]"
+
+printf '%s\n' "$json" >"$dir/$scene.json"

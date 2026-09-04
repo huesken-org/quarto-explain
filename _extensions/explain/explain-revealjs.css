@@ -1,0 +1,6 @@
+/* `.below`: code or animation on top, explanations underneath. The two children
+   stack by themselves, so only the gap is needed. The `>` matters — the
+   animation stack of `.explain-manim` sits one level deeper. */
+.reveal .stepper .explain-below > .r-stack {
+  margin-top: 0.5em;
+}

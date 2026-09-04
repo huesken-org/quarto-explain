@@ -1,0 +1,14 @@
+---
+format: latex
+filters: [code-mark]
+title: mark in a document
+---
+
+## The attribute is dropped
+
+There is no `data-*` in LaTeX and no script to draw the box, so the filter takes
+`mark` off the block and attaches nothing.
+
+```{.go mark="Rows - 1"}
+row := Rows - 1
+```

@@ -1,0 +1,25 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: intro and comment in the deck
+---
+
+## Output
+
+::: {.explain-code}
+```{.go}
+fmt.Println("Player", p)
+```
+
+:::: {.intro}
+A preliminary note — step 0 in the deck.
+::::
+
+:::: {lines="1"}
+The call.
+::::
+
+:::: {.comment}
+A comment — a step at this place in the deck.
+::::
+:::

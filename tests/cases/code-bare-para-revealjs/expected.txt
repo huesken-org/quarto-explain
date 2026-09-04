@@ -1,0 +1,45 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">a bare paragraph is a step</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="connecting-prose" class="slide level2">
+<h2>Connecting prose</h2>
+<p>A paragraph written without a fenced div is an unstyled step — it highlights nothing, but it takes its place in the sequence. All four constructs treat it the same way; <code>.explain-code</code> used to drop it silently.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1||2"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>b<span class="op">.</span>cells<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>The search.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>A step of its own, with no line reference.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>The access.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

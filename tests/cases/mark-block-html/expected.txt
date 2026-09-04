@@ -1,0 +1,33 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">mark on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="same-attribute-same-assets" class="level2">
+<h2 class="anchored" data-anchor-id="same-attribute-same-assets">Same attribute, same assets</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark="Rows - 1"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>row <span class="op">:=</span> Rows <span class="op">-</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+
+</main>
+--- assets
+code-mark.css
+code-mark.js
+--- warnings

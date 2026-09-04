@@ -1,0 +1,115 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: fragment order
+---
+
+## explain-code
+
+::: {.explain-code}
+```{.py}
+i = first_free(col)
+if i < 0:
+    raise Full(col)
+grid[i][col] = value
+```
+
+:::: {lines="1"}
+One.
+::::
+
+:::: {lines="2-3"}
+Two.
+::::
+
+:::: {lines="4"}
+Three.
+::::
+:::
+
+## explain-code with an intro
+
+::: {.explain-code}
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {.intro}
+Nothing highlighted yet.
+::::
+
+:::: {lines="1"}
+One.
+::::
+
+:::: {lines="2"}
+Two.
+::::
+:::
+
+## explain-parallel-code
+
+::: {.explain-parallel-code}
+```{.py filename="A"}
+lock.acquire()
+count += 1
+```
+
+```{.py filename="B"}
+lock.acquire()
+print(count)
+```
+
+:::: {lines1="1" lines2="1"}
+One.
+::::
+
+:::: {lines1="2"}
+Two.
+::::
+:::
+
+## explain-code-manim
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("one")
+        self.next_section("two")
+```
+
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {lines="1" section="one"}
+One.
+::::
+
+:::: {lines="2" section="two"}
+Two.
+::::
+:::
+
+## a hand-written stepper
+
+::: {.stepper}
+```{.py code-line-numbers="1|2|1-2"}
+a = 1
+b = 2
+```
+
+:::: {.step-control}
+One.
+
+Two.
+
+Both.
+::::
+:::

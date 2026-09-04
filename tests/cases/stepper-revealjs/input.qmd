@@ -1,0 +1,22 @@
+---
+format: revealjs
+filters: [stepper]
+title: stepper in the deck
+---
+
+## Step by step
+
+::: {.stepper}
+```{.go code-line-numbers="1|2|1-2"}
+a := 1
+b := 2
+```
+
+:::: {.step-control}
+First a.
+
+Then b.
+
+Both.
+::::
+:::

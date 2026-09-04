@@ -1,0 +1,22 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: mark on the steps
+---
+
+## Parts of a line
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {lines="1" mark="freeRow"}
+The search.
+::::
+
+:::: {lines="2" mark="b.cells"}
+The access.
+::::
+:::

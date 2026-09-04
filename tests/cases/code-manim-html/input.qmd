@@ -1,0 +1,40 @@
+---
+format: html
+filters: [explain, manim, stepper]
+title: code-manim on the website
+---
+
+## Animation and code side by side
+
+Unlike `.explain-manim`, this construct keeps its layout panel on the website:
+the panel holds the animation and the code, while the prose sits below it at
+full width, so neither column can be stretched by the text.
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("tree")
+        self.next_section("deep")
+```
+
+```{.go}
+func minimax(b *Board, depth int) int {
+	if depth == 0 {
+		return score(b)
+	}
+	return best(b, depth-1)
+}
+```
+
+:::: {lines="1-3" section="tree"}
+The leaf.
+::::
+
+:::: {lines="4" section="deep"}
+The descent.
+::::
+:::

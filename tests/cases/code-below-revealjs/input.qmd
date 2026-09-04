@@ -1,0 +1,17 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: below layout
+---
+
+## Code on top, explanation underneath
+
+::: {.explain-code .below}
+```{.go}
+b.cells[row][col] = p
+```
+
+:::: {lines="1"}
+A wide line needs the whole slide.
+::::
+:::

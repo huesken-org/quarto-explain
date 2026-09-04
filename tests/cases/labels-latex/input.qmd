@@ -1,0 +1,47 @@
+---
+format: latex
+filters: [explain, stepper]
+title: configured wording in the handout
+explain:
+  line-label: "Zeile"
+  lines-label: "Zeilen"
+  left-label: "links"
+  right-label: "rechts"
+---
+
+## Ein Zug
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {lines="1"}
+Singular in der Beschriftung.
+::::
+
+:::: {lines="1-2"}
+Plural in der Beschriftung.
+::::
+:::
+
+## Nebenläufig
+
+Ohne `filename=` benennt `left-label`/`right-label` die beiden Listings.
+
+::: {.explain-parallel-code}
+```{.go}
+mu.Lock()
+score++
+```
+
+```{.go}
+mu.Lock()
+fmt.Println(score)
+```
+
+:::: {lines1="1" lines2="1"}
+Beide wollen das Lock.
+::::
+:::

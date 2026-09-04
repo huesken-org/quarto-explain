@@ -1,0 +1,26 @@
+title: Explain Blocks
+author: Nathan Hüsken
+version: "0.1.0"
+quarto-required: ">=1.4.0"
+
+# Needs the `stepper` extension from the same repo: the filters here build the
+# `.stepper`/`.step-control`/`.step` structure, and only stepper.lua turns that
+# into fragments or the button stepper. `explain-manim` and `explain-code-manim`
+# additionally need `manim`.
+
+# `at: pre-ast` is mandatory: the filters have to see the code block
+# as it stands in the source. Later — after Quarto's own filters — a block with
+# `filename=` is already wrapped in a `.code-with-filename` div and thus no
+# CodeBlock for us; `explain-parallel-code` then aborts with
+# "need exactly two code blocks, found 0".
+
+contributes:
+  filters:
+    - path: explain-code.lua
+      at: pre-ast
+    - path: explain-parallel-code.lua
+      at: pre-ast
+    - path: explain-code-manim.lua
+      at: pre-ast
+    - path: explain-manim.lua
+      at: pre-ast

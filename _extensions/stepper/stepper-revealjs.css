@@ -1,0 +1,50 @@
+/* Steps across the full column width. Reveal's `.r-stack > * { margin: auto }`
+   overrides the `justify-self: stretch` of grid items, so the steps would shrink
+   to their content and sit centred while a neighbouring block fills its column.
+   The auto margin stays effective vertically. */
+.reveal .stepper .r-stack > * {
+  width: 100%;
+}
+
+/* "gravity": which edge the layers of an r-stack align to, set by
+   `.r-stack-fragments` and `.hide-code`. Reveal centres them, and the cell
+   height follows the tallest layer, so a short layer floats in the middle of a
+   box spanned by a long one. Zeroing one auto margin pins it to an edge. */
+.reveal .r-stack.gravity-top > * {
+  margin-top: 0;
+}
+
+.reveal .r-stack.gravity-bottom > * {
+  margin-bottom: 0;
+}
+
+/* `.no-transition`: reveal's 0.2 s cross-fade swapped for an instant switch.
+   Set by `.r-stack-fragments` and by manim.lua on stacked video steps, where
+   fading out and in at once lets the background bleed through.
+
+   Four rules: reveal drives the two fragment kinds in opposite directions — a
+   plain fragment is hidden until it gains `.visible`, a `.fade-out` one starts
+   shown and is hidden once it does. */
+.reveal .slides section .fragment.no-transition {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}
+
+.reveal .slides section .fragment.visible.no-transition {
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+}
+
+.reveal .slides section .fragment.fade-out.no-transition {
+  opacity: 1;
+  visibility: visible;
+  transition: none;
+}
+
+.reveal .slides section .fragment.visible.no-transition.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}

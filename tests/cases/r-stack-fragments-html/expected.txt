@@ -1,0 +1,39 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">r-stack-fragments outside revealjs</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="no-fragments-to-stack" class="level2">
+<h2 class="anchored" data-anchor-id="no-fragments-to-stack">No fragments to stack</h2>
+<p>Outside revealjs the layers simply follow one another; the div is kept, minus the marker class, so an id or a class of the author’s survives.</p>
+<div id="demo" class="extra" data-gravity="top">
+<div>
+<p>First.</p>
+</div>
+<div>
+<p>Second.</p>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+--- warnings

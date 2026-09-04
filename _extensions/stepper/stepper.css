@@ -1,0 +1,74 @@
+/* Website stepper: stepped content on top, one explanation and the prev/next
+   controls below. The nav bar is built by stepper.js. */
+
+.stepper {
+	--stepper-accent: #2780e3;
+	/* The nav bar carries no margin of its own. */
+	margin-bottom: 1.4em;
+}
+
+/* All choices share one grid cell, so the control keeps the height of the
+   tallest step and the block does not resize on every click. */
+.stepper .step-control {
+	display: grid;
+	margin-top: 0.7em;
+}
+
+.stepper .step-choice {
+	grid-area: 1 / 1;
+	visibility: hidden;
+}
+
+.stepper .step-choice.active {
+	visibility: visible;
+}
+
+.stepper .step-choice > :last-child {
+	margin-bottom: 0;
+}
+
+/* --- nav bar ------------------------------------------------------------- */
+
+.stepper .step-nav {
+	display: flex;
+	align-items: center;
+	gap: 0.5em;
+	margin-top: 0.5em;
+}
+
+.stepper .step-nav button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2em;
+	height: 2em;
+	padding: 0;
+	border: 1px solid var(--stepper-accent);
+	border-radius: 0.3em;
+	background: transparent;
+	color: var(--stepper-accent);
+	font-size: 1em;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		background-color 0.12s ease,
+		color 0.12s ease,
+		opacity 0.12s ease;
+}
+
+.stepper .step-nav button:hover:not(:disabled) {
+	background: var(--stepper-accent);
+	color: #fff;
+}
+
+.stepper .step-nav button:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+.stepper .step-position {
+	/* tabular figures so the counter does not shift the buttons as it counts up */
+	font-variant-numeric: tabular-nums;
+	font-size: 0.9em;
+	opacity: 0.7;
+}

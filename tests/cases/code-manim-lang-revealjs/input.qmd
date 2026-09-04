@@ -1,0 +1,31 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: code-manim is not Go-only
+---
+
+## Any language beside the animation
+
+The second block is simply the one that is not the manim block; nothing
+downstream cares about its language.
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("borrow")
+```
+
+```{.rust}
+fn main() {
+    let b = Board::new();
+}
+```
+
+:::: {lines="1-2" section="borrow"}
+Ownership moves into the function.
+::::
+:::

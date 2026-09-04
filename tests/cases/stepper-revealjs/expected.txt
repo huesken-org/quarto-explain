@@ -1,0 +1,36 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">stepper in the deck</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="step-by-step" class="slide level2">
+<h2>Step by step</h2>
+<div class="stepper">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1|2|1-2"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a>a <span class="op">:=</span> <span class="dv">1</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>b <span class="op">:=</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+First a.
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+Then b.
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+Both.
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

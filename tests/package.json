@@ -1,0 +1,8 @@
+{
+  "name": "quarto-explain-tests",
+  "private": true,
+  "description": "Only for tests/fragment-order.js, which replays the runtime fragment sort in jsdom. The golden-file suite needs nothing but quarto; this part is skipped when jsdom is absent.",
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  }
+}

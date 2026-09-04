@@ -1,0 +1,36 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: animation and code side by side
+---
+
+## Minimax
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("tree")
+        self.next_section("deep")
+```
+
+```{.go}
+func minimax(b *Board, depth int) int {
+	if depth == 0 {
+		return score(b)
+	}
+	return best(b, depth-1)
+}
+```
+
+:::: {lines="1-2" section="tree"}
+The entry point.
+::::
+
+:::: {lines="3-5" section="deep"}
+The descent.
+::::
+:::

@@ -1,0 +1,22 @@
+---
+format: html
+filters: [explain, stepper, code-mark]
+title: mark per step on the website
+---
+
+## No steps, so the marks are merged
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {lines="1" mark="freeRow"}
+The search.
+::::
+
+:::: {lines="2" mark="b.cells"}
+The access.
+::::
+:::

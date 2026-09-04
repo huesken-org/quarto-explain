@@ -1,0 +1,26 @@
+/* Vertically centre the animation column of `.explain-code-manim`: it is almost
+   always shorter than the listing beside it and would otherwise sit at the top
+   of its column. Applies to every HTML target — deck as well as website. */
+.explain-code-manim-animation {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* `.comment` blocks — usually the program output — hang below the construct on
+   the website: as a child of the `.stepper` (`.explain-code-manim`) or of the
+   annotated block (`.explain-code`), as its sibling where the shape wraps
+   (`.explain-manim`, `.explain-parallel-code`). None of them brings a top
+   margin of its own — Quarto's `.code-with-filename` wrapper has none, a bare
+   `<pre>` carries only `margin-bottom` — so the output sat flush against the
+   last explanation and against the stepper's nav bar. Same 1em as the gaps
+   inside the construct.
+   RevealJS is unaffected: there a `.comment` is a step of the sequence, and
+   none of these containers holds it directly. */
+.stepper > .explain-comment,
+.stepper ~ .explain-comment,
+.explain-annotated > .explain-comment,
+.stepper > .code-with-filename:has(.explain-comment),
+.stepper ~ .code-with-filename:has(.explain-comment),
+.explain-annotated > .code-with-filename:has(.explain-comment) {
+  margin-top: 1em;
+}

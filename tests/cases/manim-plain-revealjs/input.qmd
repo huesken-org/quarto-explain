@@ -1,0 +1,23 @@
+---
+format: revealjs
+filters: [manim, stepper]
+title: manim without explain — steps without a .stepper wrapper
+---
+
+## Just the animation
+
+<!-- Records what a manim block *without* a surrounding explain construct
+     yields: an `.r-stack` of `.step` divs carrying `show-from`. Only stepper.lua
+     turns those into reveal fragments, and it only reaches inside a `.stepper`
+     div — so here it stays at visibly stacked videos. Whoever wants to step
+     through a bare block wraps it in `::: {.stepper}` themselves. -->
+
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("one")
+        self.next_section("two")
+```

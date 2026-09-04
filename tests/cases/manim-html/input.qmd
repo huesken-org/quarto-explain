@@ -1,0 +1,31 @@
+---
+format: html
+filters: [explain, manim, stepper]
+title: animation on the website
+---
+
+## The search
+
+The section videos stay in place and cover each other; on the website that
+stacking is `manim.css` (`.manim-stack`), reveal's `.no-transition` rules are not
+attached here.
+
+::: {.explain-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("board")
+        self.next_section("window")
+```
+
+:::: {section="board"}
+The board.
+::::
+
+:::: {section="window"}
+The window moves along.
+::::
+:::

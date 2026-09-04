@@ -1,0 +1,56 @@
+---
+format: revealjs
+filters: [stepper]
+title: r-stack-fragments
+---
+
+## Layers in one spot
+
+::: {.r-stack-fragments}
+::: {}
+First, and it fades out.
+:::
+
+::: {}
+Replaces it.
+:::
+
+::: {}
+And this replaces that.
+:::
+:::
+
+## Joining an existing fragment sequence
+
+`fragment-index` says where the first layer sits, so the stack can start after
+fragments that came before it.
+
+::: {.r-stack-fragments fragment-index="2" gravity="top"}
+::: {.a}
+A layer keeps its own classes.
+:::
+
+::: {.b}
+And its own attributes.
+:::
+:::
+
+## Without the cross-fade
+
+::: {.r-stack-fragments .no-transition}
+::: {}
+One.
+:::
+
+::: {}
+Two.
+:::
+:::
+
+## A bare block becomes a layer
+
+::: {.r-stack-fragments}
+Just a paragraph.
+
+Another one.
+:::

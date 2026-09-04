@@ -1,0 +1,54 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">configured nav labels</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="schrittweise" class="level2">
+<h2 class="anchored" data-anchor-id="schrittweise">Schrittweise</h2>
+<p>The labels travel to the browser as data-prev-label / data-next-label on the <code>.stepper</code> element; stepper.js uses them as the aria-label of the two buttons.</p>
+<div class="stepper" data-prev-label="Vorheriger Schritt" data-next-label="Nächster Schritt">
+<div class="steps">
+<div class="step" data-show-from="0" data-hide-from="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-source-line-numbers="1"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">:=</span> <span class="dv">1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">:=</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="step" data-show-from="1" data-hide-from="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-source-line-numbers="2"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">:=</span> <span class="dv">1</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>b <span class="op">:=</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="step-control">
+<div class="step-choice" data-step="0">
+Erst a.
+</div>
+<div class="step-choice" data-step="1">
+Dann b.
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+stepper-video.js
+stepper.css
+stepper.js
+--- warnings

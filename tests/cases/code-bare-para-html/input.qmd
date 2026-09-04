@@ -1,0 +1,27 @@
+---
+format: html
+filters: [explain, stepper]
+title: a bare paragraph on the website
+---
+
+## Connecting prose
+
+On the website the same paragraph becomes an annotation without a badge
+(`.no-marker`), so the numbering of the badged steps keeps no gap.
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {lines="1"}
+The search.
+::::
+
+A step of its own, with no line reference.
+
+:::: {lines="2"}
+The access.
+::::
+:::

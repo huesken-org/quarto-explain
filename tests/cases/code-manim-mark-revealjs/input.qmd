@@ -1,0 +1,36 @@
+---
+format: revealjs
+filters: [explain, manim, stepper, code-mark]
+title: mark on a code-manim step
+---
+
+## Marks reach the code block
+
+`mark=` on a step of `.explain-code-manim` is collected into `mark-steps`, the
+same as in `.explain-code` — and so it also reaches code-mark's build-time check.
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("tree")
+        self.next_section("deep")
+```
+
+```{.go}
+func minimax(b *Board, depth int) int {
+	return best(b, depth-1)
+}
+```
+
+:::: {lines="1" section="tree" mark="depth int"}
+The entry point.
+::::
+
+:::: {lines="2" section="deep" mark="depth-1"}
+The descent.
+::::
+:::

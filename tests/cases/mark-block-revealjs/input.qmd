@@ -1,0 +1,31 @@
+---
+format: revealjs
+filters: [code-mark]
+title: mark on the block itself
+---
+
+## Whole block, one line, several spots
+
+```{.go mark="Rows - 1"}
+row := Rows - 1
+col := Rows - 1
+```
+
+## Restricted to a line
+
+```{.go mark="2:Rows - 1"}
+row := Rows - 1
+col := Rows - 1
+```
+
+## Several specs, and a `;` that belongs to the text
+
+Two backslashes: pandoc's attribute parser eats one, the filter splits at the
+`;` that is left unescaped — so this is one spec for line 1 and one for line 3,
+not four.
+
+```{.go mark="1:for i := 0\\; i < n\\; i++;3:done"}
+for i := 0; i < n; i++ {
+}
+done := true
+```

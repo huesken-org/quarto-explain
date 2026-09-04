@@ -1,0 +1,36 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: animation with explanation steps
+---
+
+## The search
+
+::: {.explain-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("board")
+        self.next_section("window")
+        self.next_section("hit")
+```
+
+:::: {.intro}
+What this is about.
+::::
+
+:::: {section="board"}
+The board.
+::::
+
+:::: {section="window"}
+The window moves along.
+::::
+
+:::: {section="hit"}
+Four pieces alike.
+::::
+:::

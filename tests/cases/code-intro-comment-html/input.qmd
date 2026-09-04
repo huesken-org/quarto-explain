@@ -1,0 +1,25 @@
+---
+format: html
+filters: [explain, stepper]
+title: intro and comment on the website
+---
+
+## Output
+
+::: {.explain-code}
+```{.go}
+fmt.Println("Player", p)
+```
+
+:::: {.intro}
+A preliminary note — above the block on the website.
+::::
+
+:::: {lines="1"}
+The call.
+::::
+
+:::: {.comment}
+A comment — pulled below the block on the website.
+::::
+:::

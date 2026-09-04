@@ -1,0 +1,66 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">r-stack-fragments</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="layers-in-one-spot" class="slide level2">
+<h2>Layers in one spot</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>First, and it fades out.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Replaces it.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>And this replaces that.</p>
+</div>
+</div>
+</section>
+<section id="joining-an-existing-fragment-sequence" class="slide level2">
+<h2>Joining an existing fragment sequence</h2>
+<p><code>fragment-index</code> says where the first layer sits, so the stack can start after fragments that came before it.</p>
+<div class="r-stack gravity-top">
+<div class="a fragment fade-out" data-fragment-index="2">
+<p>A layer keeps its own classes.</p>
+</div>
+<div class="b fragment current-visible" data-fragment-index="2">
+<p>And its own attributes.</p>
+</div>
+</div>
+</section>
+<section id="without-the-cross-fade" class="slide level2">
+<h2>Without the cross-fade</h2>
+<div class="r-stack">
+<div class="fragment fade-out no-transition" data-fragment-index="0">
+<p>One.</p>
+</div>
+<div class="fragment current-visible no-transition" data-fragment-index="0">
+<p>Two.</p>
+</div>
+</div>
+</section>
+<section id="a-bare-block-becomes-a-layer" class="slide level2">
+<h2>A bare block becomes a layer</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Just a paragraph.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Another one.</p>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

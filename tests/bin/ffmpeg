@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Stub for ffmpeg.
+#
+# For LaTeX and the PDF print, manim.lua extracts the last frame of every section
+# video (`last_frame`) and afterwards only checks whether the file exists. This
+# stub writes a 1×1 PNG to the output location.
+set -eu
+
+out=${*: -1}
+mkdir -p "$(dirname "$out")"
+base64 -d >"$out" <<'B64'
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==
+B64

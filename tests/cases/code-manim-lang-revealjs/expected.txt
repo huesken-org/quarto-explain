@@ -1,0 +1,48 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">code-manim is not Go-only</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="any-language-beside-the-animation" class="slide level2">
+<h2>Any language beside the animation</h2>
+<p>The second block is simply the one that is not the manim block; nothing downstream cares about its language.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row">
+<div class="explain-code-manim-animation quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="r-stack manim-stack">
+<div class="step no-transition" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_borrow.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="explain-code-manim-code quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1-2"><pre class="sourceCode numberSource rust number-lines code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="" aria-label="1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>    <span class="kw">let</span> b <span class="op">=</span> <span class="pp">Board::</span>new()<span class="op">;</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Ownership moves into the function.</p>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+manim.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

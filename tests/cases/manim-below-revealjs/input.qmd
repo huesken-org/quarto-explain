@@ -1,0 +1,27 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: animation across the full width
+---
+
+## The search
+
+::: {.explain-manim .below}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("board")
+        self.next_section("window")
+```
+
+:::: {section="board"}
+The board.
+::::
+
+:::: {section="window"}
+The window moves along.
+::::
+:::

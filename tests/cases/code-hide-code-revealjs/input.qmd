@@ -1,0 +1,23 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: hide-code
+---
+
+## Long output
+
+::: {.explain-code gravity="top"}
+```{.go}
+for i := range 3 {
+	fmt.Println(i)
+}
+```
+
+:::: {lines="1"}
+The loop.
+::::
+
+:::: {.comment .hide-code}
+The output alone, without the code — its own layer in the r-stack.
+::::
+:::

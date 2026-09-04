@@ -1,0 +1,40 @@
+---
+format: latex
+filters: [explain, stepper]
+title: explain-code in the handout
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+func (b *Board) Drop(col int, p Player) error {
+	row := b.freeRow(col)
+	if row < 0 {
+		return ErrColumnFull
+	}
+	b.cells[row][col] = p
+	return nil
+}
+```
+
+:::: {.intro}
+The move in one method.
+::::
+
+:::: {lines="2"}
+A single line — singular in the label.
+::::
+
+:::: {lines="3-5"}
+A range.
+::::
+
+:::: {lines="3,6-7"}
+Several ranges.
+::::
+
+:::: {}
+A step with no line reference at all.
+::::
+:::

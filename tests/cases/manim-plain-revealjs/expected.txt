@@ -1,0 +1,32 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">manim without explain — steps without a .stepper wrapper</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="just-the-animation" class="slide level2">
+<h2>Just the animation</h2>
+<!-- Records what a manim block *without* a surrounding explain construct
+     yields: an `.r-stack` of `.step` divs carrying `show-from`. Only stepper.lua
+     turns those into reveal fragments, and it only reaches inside a `.stepper`
+     div — so here it stays at visibly stacked videos. Whoever wants to step
+     through a bare block wraps it in `::: {.stepper}` themselves. -->
+<div class="r-stack manim-stack">
+<div class="step no-transition" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_one.mp4" type="video/mp4"></video>
+</div>
+<div class="step no-transition" data-show-from="1">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_two.mp4" type="video/mp4"></video>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+manim.css
+--- warnings

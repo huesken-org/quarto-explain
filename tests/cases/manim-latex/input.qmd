@@ -1,0 +1,27 @@
+---
+format: latex
+filters: [explain, manim, stepper]
+title: animation in the handout
+---
+
+## The search
+
+::: {.explain-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("board")
+        self.next_section("window")
+```
+
+:::: {section="board"}
+The board — in the PDF the still frame of this section stands above it.
+::::
+
+:::: {section="window"}
+The window moves along.
+::::
+:::

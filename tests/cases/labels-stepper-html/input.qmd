@@ -1,0 +1,26 @@
+---
+format: html
+filters: [stepper]
+title: configured nav labels
+stepper:
+  prev-label: "Vorheriger Schritt"
+  next-label: "Nächster Schritt"
+---
+
+## Schrittweise
+
+The labels travel to the browser as data-prev-label / data-next-label on the
+`.stepper` element; stepper.js uses them as the aria-label of the two buttons.
+
+::: {.stepper}
+```{.go code-line-numbers="1|2"}
+a := 1
+b := 2
+```
+
+:::: {.step-control}
+Erst a.
+
+Dann b.
+::::
+:::

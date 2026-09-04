@@ -1,0 +1,28 @@
+---
+format: latex
+filters: [explain, manim, stepper]
+title: animation and code in the handout
+---
+
+## Minimax
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("tree")
+```
+
+```{.go}
+func minimax(b *Board, depth int) int {
+	return best(b, depth-1)
+}
+```
+
+:::: {lines="1" section="tree"}
+The entry point.
+::::
+:::

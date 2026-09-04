@@ -1,0 +1,16 @@
+title: Code Mark
+author: Nathan Hüsken
+version: "0.1.0"
+quarto-required: ">=1.4.0"
+
+# Runs **last** of the filters in this repo: `explain` collects the `mark=` of
+# its steps into a `mark-steps` attribute, and this filter validates what ends up
+# on the block.
+
+# `at: pre-ast` like the others: the search runs against the code block as it
+# stands in the source.
+
+contributes:
+  filters:
+    - path: code-mark.lua
+      at: pre-ast

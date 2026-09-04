@@ -1,0 +1,11 @@
+---
+format: revealjs
+filters: [code-mark]
+title: a typo must not stay silent
+---
+
+## Not in the block
+
+```{.go mark="freeColumn"}
+row := b.freeRow(col)
+```

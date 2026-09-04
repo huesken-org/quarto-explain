@@ -1,0 +1,47 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">mark per step on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="no-steps-so-the-marks-are-merged" class="level2">
+<h2 class="anchored" data-anchor-id="no-steps-so-the-marks-are-merged">No steps, so the marks are merged</h2>
+<div class="explain-annotated">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark="freeRow;b.cells"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>b<span class="op">.</span>cells<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="explain-annotations">
+<div class="explain-annotation" data-lines="1" data-index="1">
+<p>The search.</p>
+</div>
+<div class="explain-annotation" data-lines="2" data-index="2">
+<p>The access.</p>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+code-mark.css
+code-mark.js
+explain-code.css
+explain-code.js
+explain.css
+--- warnings

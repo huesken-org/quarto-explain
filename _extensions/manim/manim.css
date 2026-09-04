@@ -1,0 +1,10 @@
+/* The section videos lie on top of each other: each stays in place from its
+   step on, and the next covers it with its first frame (see manim.lua). Reveal's
+   own `.r-stack` does this on the slides; the website needs these two rules. */
+.manim-stack {
+  display: grid;
+}
+
+.manim-stack > * {
+  grid-area: 1 / 1;
+}

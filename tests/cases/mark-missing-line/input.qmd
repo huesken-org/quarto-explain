@@ -1,0 +1,11 @@
+---
+format: revealjs
+filters: [code-mark]
+title: line beyond the block
+---
+
+## Only one line here
+
+```{.go mark="5:row"}
+row := b.freeRow(col)
+```
