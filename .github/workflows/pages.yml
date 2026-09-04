@@ -1,0 +1,77 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# What actions/deploy-pages needs: read the repo, write a Pages deployment, and
+# prove where the artifact came from.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push supersedes a running build.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same pin as the test workflow, plus TeX for the PDF outputs.
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.10.18
+          tinytex: true
+
+      # manim really runs here. cairo and pango are needed to build pycairo,
+      # ffmpeg to mux the section videos — and the manim extension itself uses
+      # ffmpeg for the still frames of the PDF.
+      - name: System dependencies for manim
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2-dev libpango1.0-dev ffmpeg
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: example/requirements.txt
+
+      - name: Install manim
+        run: pip install -r example/requirements.txt
+
+      # The extension caches renders content-hashed, so an unchanged scene is
+      # not re-rendered. Restoring that cache turns the manim step from minutes
+      # into seconds; the key is the scene sources themselves.
+      - name: Restore the manim cache
+        uses: actions/cache@v4
+        with:
+          path: example/manim_renders
+          key: manim-renders-${{ hashFiles('example/manim.qmd') }}
+
+      - name: Render the example
+        working-directory: example
+        run: |
+          quarto render
+          quarto render --profile manim
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: example/_output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
