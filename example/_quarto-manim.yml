@@ -1,0 +1,9 @@
+# Profile for the manim tour: `quarto render --profile manim`.
+#
+# manim.qmd is kept out of the default `render:` list so a plain `quarto render`
+# needs no Python toolchain. Rendering it through a profile rather than as a
+# loose file matters: only inside the project does it inherit the `filters:`
+# block, land in `_output/`, and get its `manim_renders/` videos copied along.
+project:
+  render:
+    - manim.qmd

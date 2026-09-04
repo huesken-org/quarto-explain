@@ -1,0 +1,77 @@
+---
+title: "Konfigurierbare Beschriftungen"
+format:
+  html:
+    output-file: localised-website.html
+  pdf:
+    output-file: localised-handout.pdf
+
+explain:
+  line-label: "Zeile"
+  lines-label: "Zeilen"
+  left-label: "links"
+  right-label: "rechts"
+stepper:
+  prev-label: "Vorheriger Schritt"
+  next-label: "Nächster Schritt"
+---
+
+## Zeilenbezüge im PDF
+
+`line-label` und `lines-label` beschriften die Zeilenbezüge der LaTeX-Ausgabe;
+Singular oder Plural wählt der Filter selbst.
+
+::: {.explain-code}
+```{.py}
+total = 0
+total += row.value
+```
+
+:::: {lines="1"}
+Ergibt „**Zeile 1** — …".
+::::
+
+:::: {lines="1-2"}
+Ergibt „**Zeilen 1–2** — …".
+::::
+:::
+
+## Namen der beiden Listings
+
+Ohne `filename=` benennt `left-label` / `right-label` die beiden Blöcke von
+`.explain-parallel-code` im PDF.
+
+::: {.explain-parallel-code}
+```{.py}
+lock.acquire()
+count += 1
+```
+
+```{.py}
+lock.acquire()
+print(count)
+```
+
+:::: {lines1="1" lines2="1"}
+Ergibt „**links Zeile 1 · rechts Zeile 1** — …".
+::::
+:::
+
+## Die Knöpfe des Website-Steppers
+
+`prev-label` und `next-label` sind die `aria-label` der beiden Knöpfe — sichtbar
+nur für Screenreader. Ohne Konfiguration nimmt `stepper.js` seine englischen
+Vorgaben.
+
+::: {.stepper}
+```{.py code-line-numbers="1|2"}
+a = 1
+b = 2
+```
+
+:::: {.step-control}
+Erst a.
+
+Dann b.
+::::
+:::

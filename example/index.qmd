@@ -1,0 +1,303 @@
+---
+title: "quarto-explain — a tour"
+subtitle: "one source, three targets"
+format:
+  revealjs:
+    output-file: slides.html
+  html:
+    output-file: website.html
+  pdf:
+    output-file: handout.pdf
+---
+
+## What this is
+
+Every construct below is written once. Only the target differs:
+
+| | RevealJS | Website | PDF |
+|---|---|---|---|
+| steps | reveal fragments | one at a time, prev/next | a list, all at once |
+| the code | highlighted per step | numbered badges | line numbers |
+
+The manim constructs are in `manim.qmd`.
+
+## `.explain-code`
+
+One code block, one div per step. `lines=` says what a step highlights.
+
+::: {.explain-code}
+```{.py}
+def total(rows):
+    amount = 0
+    for row in rows:
+        amount += row.value
+    return amount
+```
+
+:::: {lines="2"}
+Start the sum at zero.
+::::
+
+:::: {lines="3-4"}
+Add every row to it.
+::::
+
+:::: {lines="5"}
+Hand the result back.
+::::
+:::
+
+## Ranges, gaps, and steps without lines
+
+`lines=` takes single lines, ranges, and both combined. Two steps may share a
+line, and a plain `::: {}` step highlights nothing.
+
+::: {.explain-code}
+```{.py}
+def find(items, wanted):
+    for i, item in enumerate(items):
+        if item == wanted:
+            return i
+    return -1
+```
+
+:::: {lines="2"}
+Walk the list, index and value together.
+::::
+
+:::: {lines="3,5"}
+Two lines that do not touch: the test, and the answer when it never holds.
+::::
+
+:::: {}
+Connecting prose, highlighting nothing.
+::::
+
+:::: {lines="4"}
+The first hit wins.
+::::
+:::
+
+## `.intro` and `.comment`
+
+`.intro` is step 0 on the slides and a paragraph above the block elsewhere;
+`.comment` is a step in place on the slides and is pulled below the block
+elsewhere.
+
+::: {.explain-code}
+```{.py}
+print(f"{name}: {count} items")
+```
+
+:::: {.intro}
+Before the first step.
+::::
+
+:::: {lines="1"}
+An f-string interpolates both names.
+::::
+
+:::: {.comment}
+**Output:** `cart: 3 items`
+::::
+:::
+
+## `mark=` — a spot inside a line
+
+`lines=` takes whole lines; `mark=` boxes a piece of text inside one. On the
+slides one mark per step, on the website merged.
+
+::: {.explain-code}
+```{.py}
+rows = load(path)
+total = sum(r.value for r in rows)
+```
+
+:::: {lines="1" mark="load(path)"}
+Read the file.
+::::
+
+:::: {lines="2" mark="r.value"}
+One field of each row.
+::::
+:::
+
+The search text is checked at build time — a typo aborts the render.
+
+## `.below` — code at full width
+
+Stacks code and steps instead of putting them side by side. No effect on website
+and PDF.
+
+::: {.explain-code .below}
+```{.py}
+matrix = [[cell.weight * scale for cell in row if cell.active] for row in grid]
+```
+
+:::: {lines="1"}
+Too wide for half a slide.
+::::
+:::
+
+## `layout=` — a different column ratio
+
+::: {.explain-code layout="[0.65, 0.35]"}
+```{.py}
+for row in grid:
+    for cell in row:
+        if cell.active:
+            yield cell
+```
+
+:::: {lines="1-2"}
+More room for the code.
+::::
+
+:::: {lines="3-4"}
+Less for the prose.
+::::
+:::
+
+## `.hide-code` — the output on its own layer
+
+A long output gets the full width, on the same slide. `gravity` pins the layers
+to an edge.
+
+::: {.explain-code gravity="top"}
+```{.py}
+for i in range(3):
+    print("row", i)
+```
+
+:::: {lines="1"}
+Three passes.
+::::
+
+:::: {.comment .hide-code}
+```
+row 0
+row 1
+row 2
+```
+::::
+:::
+
+## `.explain-parallel-code`
+
+Two blocks side by side, explanation underneath. `lines1=`/`lines2=` address
+left and right; leaving one out means no highlight on that side.
+
+::: {.explain-parallel-code}
+```{.py filename="Worker 1"}
+lock.acquire()
+count += 1
+lock.release()
+```
+
+```{.py filename="Worker 2"}
+lock.acquire()
+print(count)
+lock.release()
+```
+
+:::: {}
+Both run at the same time. The source order decides nothing.
+::::
+
+:::: {lines1="1" lines2="1"}
+Both want the lock — one gets it, the other waits here.
+::::
+
+:::: {lines1="2-3"}
+The winner counts up and releases. Only now does the other continue.
+::::
+:::
+
+In the PDF each step names both sides by their `filename=`; without one, the
+configurable left/right wording is used.
+
+## `.stepper` — the structure by hand
+
+`explain` produces this. A code block with `code-line-numbers="1|2|1-2"` becomes
+one step per segment.
+
+::: {.stepper}
+```{.py code-line-numbers="1|2|1-2"}
+a = 1
+b = 2
+```
+
+:::: {.step-control}
+First `a`.
+
+Then `b`.
+
+Both in scope.
+::::
+:::
+
+## `.step` — show-from / hide-from
+
+Visible while `show-from <= step < hide-from`; without `hide-from` it stays.
+
+::: {.stepper}
+:::: {.step show-from="1" hide-from="2"}
+Visible during step 2 only.
+::::
+
+:::: {.step show-from="2"}
+Appears at step 3 and stays.
+::::
+
+:::: {.step-control}
+Nothing shown yet.
+
+The first `.step`.
+
+The second — the first is gone.
+::::
+:::
+
+## `.r-stack-fragments`
+
+Layers in one spot, each replacing the one before it. The slide does not grow.
+
+::: {.r-stack-fragments gravity="top"}
+::: {}
+`find` walks the list from the front.
+:::
+
+::: {}
+It returns the first index that matches …
+:::
+
+::: {}
+… or `-1` when nothing does.
+:::
+:::
+
+Outside revealjs the layers simply follow one another.
+
+## `code-mark` on its own
+
+Outside `explain` the attribute sits on the block. A line number restricts the
+search to that line; several specs are separated by `;`.
+
+```{.py mark="2:scale"}
+scale = 2
+width = base * scale
+```
+
+Only the second line is marked.
+
+## A `;` in the search text
+
+Escaped with two backslashes: pandoc's attribute parser eats one.
+
+```{.py mark="1:a = 1\\; b = 2;3:done"}
+a = 1; b = 2
+c = 3
+done = True
+```
+
+Two specs, not four: one for line 1, one for line 3.

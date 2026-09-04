@@ -1,0 +1,7 @@
+# Everything here is produced from the sources in this directory.
+_output/
+manim_renders/
+.quarto/
+
+/.quarto/
+**/*.quarto_ipynb

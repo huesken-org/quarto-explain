@@ -1,0 +1,46 @@
+---
+title: "quarto-explain"
+subtitle: "Step-by-step explanations for Quarto — slides, web page and handout from one source"
+format:
+  html:
+    output-file: index.html
+    toc: false
+---
+
+Rendered examples of
+[huesken-org/quarto-explain](https://github.com/huesken-org/quarto-explain). Each
+row is one `.qmd` file rendered to every target it supports.
+
+## The tour
+
+`index.qmd` — `explain`, `stepper` and `code-mark`.
+
+| | |
+|---|---|
+| [Slides](slides.html) | reveal fragments, the code highlighted along with them |
+| [Web page](website.html) | numbered badges on the lines, a button stepper |
+| [Handout (PDF)](handout.pdf) | line numbers and a list |
+
+## The manim constructs
+
+`manim.qmd` — animations driven by the same steps.
+
+| | |
+|---|---|
+| [Slides](manim-slides.html) | the animation plays up to the current step |
+| [Web page](manim-website.html) | the same, driven by buttons |
+| [Handout (PDF)](manim-handout.pdf) | the still frame of each section |
+
+## Configurable wording
+
+`localised.qmd` — the six labels the extensions write themselves, in German.
+
+| | |
+|---|---|
+| [Web page](localised-website.html) | `Vorheriger Schritt` / `Nächster Schritt` |
+| [Handout (PDF)](localised-handout.pdf) | `Zeile 1`, `Zeilen 1–2`, `links` / `rechts` |
+
+---
+
+Sources in
+[`example/`](https://github.com/huesken-org/quarto-explain/tree/main/example).

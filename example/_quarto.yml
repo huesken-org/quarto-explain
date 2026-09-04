@@ -1,0 +1,31 @@
+project:
+  # manim.qmd is left out on purpose: it needs a working manim installation.
+  # Render it explicitly with `quarto render manim.qmd`.
+  render:
+    - home.qmd
+    - index.qmd
+    - localised.qmd
+  output-dir: _output
+
+# The order is part of the interface — see the README of this repo.
+filters:
+  - path: explain
+    at: pre-ast
+  - path: manim
+    at: pre-ast
+  - path: stepper
+    at: pre-ast
+  - path: code-mark
+    at: pre-ast
+
+# The same source renders three ways; that is the whole point of these
+# extensions. Each document names its own output files (revealjs and html would
+# both want `<name>.html` otherwise).
+format:
+  revealjs:
+    slide-number: true
+  html:
+    toc: true
+  pdf:
+    documentclass: scrartcl
+    papersize: a4
