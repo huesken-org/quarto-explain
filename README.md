@@ -262,6 +262,19 @@ The box is drawn at runtime by `code-mark.js`: a hit regularly runs across
 several syntax-highlighting spans, which a filter cannot see. LaTeX gets
 nothing.
 
+Its thickness follows the slide size: a px is a *slide* coordinate on RevealJS,
+so a fixed 2px would come out half as thick on a `width: 1920` deck as on the
+960 default. `code-mark.css` divides reveal's `--slide-width` instead — 2px at
+960, 4px at 1920, and 2px everywhere outside RevealJS. Both that and the colour
+are variables:
+
+```css
+.reveal .code-mark {
+  --code-mark-width: 3px;
+  --code-mark-color: #e37c00;
+}
+```
+
 ## Configurable wording
 
 Every word the extensions write themselves, set from the document or project

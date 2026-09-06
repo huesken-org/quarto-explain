@@ -9,26 +9,55 @@
    pushes the rest of the line to the right and the line no longer lines up with
    the others. Vertical padding is harmless — on an inline element it only grows
    the background area, not the line height.
+
+   Thickness and colour hang off two variables, so a deck can overrule them:
+
+     .reveal .code-mark { --code-mark-width: 3px; --code-mark-color: #e37c00; }
+
+   The default width follows the slide size. A px is a *slide* coordinate on
+   RevealJS: everything is authored against `width:` (960 by default) and the
+   whole slide is then scaled to the display. On a 1920×1080 deck the same 2px
+   therefore sit next to twice as much of everything else and the box goes
+   faint. Reveal puts that width in `--slide-width` on the viewport, so dividing
+   it by 480 keeps the proportion — 2px at 960, 4px at 1920. Outside RevealJS
+   the variable does not exist and the fallback gives the plain 2px. (Only the
+   *number* may be divided in `calc`, hence `width / 480` and not `2px * width /
+   960`.)
 */
 
+/* `width:` may also be given as a percentage ("100%"), which reveal passes on
+   verbatim — the division below then yields a percentage, which is no valid
+   border width. Registering the variable is what saves the box there: a
+   computed value that does not match `<length>` falls back to the initial value
+   instead of dropping the border. Browsers without `@property` ignore the rule;
+   they only ever see a deck with a numeric width, where the calc is a length. */
+@property --code-mark-width {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 2px;
+}
+
 .code-mark {
-  border-top: 2px solid #cc0000;
-  border-bottom: 2px solid #cc0000;
+  --code-mark-width: calc(var(--slide-width, 960px) / 480);
+  --code-mark-color: #cc0000;
+  --code-mark-radius: calc(var(--code-mark-width) * 2);
+  border-top: var(--code-mark-width) solid var(--code-mark-color);
+  border-bottom: var(--code-mark-width) solid var(--code-mark-color);
   padding: 0.08em 0;
 }
 
 .code-mark-start {
-  border-left: 2px solid #cc0000;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-left: var(--code-mark-width) solid var(--code-mark-color);
+  border-top-left-radius: var(--code-mark-radius);
+  border-bottom-left-radius: var(--code-mark-radius);
   padding-left: 0.15em;
   margin-left: -0.15em;
 }
 
 .code-mark-end {
-  border-right: 2px solid #cc0000;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-right: var(--code-mark-width) solid var(--code-mark-color);
+  border-top-right-radius: var(--code-mark-radius);
+  border-bottom-right-radius: var(--code-mark-radius);
   padding-right: 0.15em;
   margin-right: -0.15em;
 }
@@ -45,5 +74,5 @@
 }
 
 .code-mark[data-explain-for].explain-active {
-  border-color: #cc0000;
+  border-color: var(--code-mark-color);
 }
