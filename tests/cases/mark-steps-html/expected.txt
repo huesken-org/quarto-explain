@@ -21,16 +21,31 @@
 </header>
 
 
-<section id="no-steps-so-the-marks-are-merged" class="level2">
-<h2 class="anchored" data-anchor-id="no-steps-so-the-marks-are-merged">No steps, so the marks are merged</h2>
+<section id="one-segment-per-numbered-explanation" class="level2">
+<h2 class="anchored" data-anchor-id="one-segment-per-numbered-explanation">One segment per numbered explanation</h2>
 <div class="explain-annotated">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark="freeRow;b.cells"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark-annotations="freeRow|b.cells"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>b<span class="op">.</span>cells<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="explain-annotations">
 <div class="explain-annotation" data-lines="1" data-index="1">
 <p>The search.</p>
 </div>
 <div class="explain-annotation" data-lines="2" data-index="2">
+<p>The access.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="a-step-without-lines-has-nothing-to-hover" class="level2">
+<h2 class="anchored" data-anchor-id="a-step-without-lines-has-nothing-to-hover">A step without <code>lines=</code> has nothing to hover</h2>
+<div class="explain-annotated">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-mark="freeRow" data-mark-annotations="b.cells"><pre class="sourceCode go code-with-copy"><code class="sourceCode go"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>b<span class="op">.</span>cells<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="explain-annotations">
+<div class="explain-annotation no-marker">
+<p>No number, so this one is shown from the start.</p>
+</div>
+<div class="explain-annotation" data-lines="2" data-index="1">
 <p>The access.</p>
 </div>
 </div>

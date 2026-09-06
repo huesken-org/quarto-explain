@@ -7,7 +7,8 @@
 -- Inside `.explain-code` the mark belongs on the explanation step rather than on
 -- the block; `explain-code.lua` collects those and leaves a `mark-steps` here —
 -- one mark per step, separated by `|`, in the same segmentation as
--- `code-line-numbers`:
+-- `code-line-numbers` (on the website a `mark-annotations` instead, one segment
+-- per numbered explanation — see code-mark.js):
 --
 --     :::: {lines="5" mark="Rows - 1"}
 --     We count from the bottom up.
@@ -49,7 +50,7 @@ end
 -- Aborts the render with a readable message.
 local function fail(el, reason, hint)
 	local first_line = (el.text:match("^%s*([^\n]+)") or ""):match("^%s*(.-)%s*$")
-	local spec = el.attributes["mark"] or el.attributes["mark-steps"] or ""
+	local spec = el.attributes["mark"] or el.attributes["mark-steps"] or el.attributes["mark-annotations"] or ""
 	io.stderr:write("\n")
 	io.stderr:write("=== code-mark: " .. reason .. " ===\n")
 	io.stderr:write("  File       : " .. input_file() .. "\n")
@@ -148,14 +149,24 @@ end
 
 function CodeBlock(cb)
 	local spec = cb.attributes["mark"]
-	local steps = cb.attributes["mark-steps"]
-	if (spec == nil or spec == "") and (steps == nil or steps == "") then
+	-- Both are `|` lists written by explain-code.lua, and are checked the same
+	-- way: `mark-steps` on the slides, `mark-annotations` on the website. Built by
+	-- hand rather than as a literal: a nil in the middle would end `ipairs` early.
+	local segmented = {}
+	for _, name in ipairs({ "mark-steps", "mark-annotations" }) do
+		local list = cb.attributes[name]
+		if list ~= nil and list ~= "" then
+			table.insert(segmented, list)
+		end
+	end
+	if (spec == nil or spec == "") and #segmented == 0 then
 		return nil
 	end
 
 	if quarto.doc.is_format("latex") then
 		cb.attributes["mark"] = nil
 		cb.attributes["mark-steps"] = nil
+		cb.attributes["mark-annotations"] = nil
 		return cb
 	end
 
@@ -164,9 +175,9 @@ function CodeBlock(cb)
 	if spec and spec ~= "" then
 		validate(cb, spec, lines)
 	end
-	if steps and steps ~= "" then
-		for _, step in ipairs(split_escaped(steps, "|")) do
-			validate(cb, step, lines)
+	for _, list in ipairs(segmented) do
+		for _, segment in ipairs(split_escaped(list, "|")) do
+			validate(cb, segment, lines)
 		end
 	end
 
@@ -177,8 +188,8 @@ function CodeBlock(cb)
 		stylesheets = { "code-mark.css" },
 	})
 
-	-- Quarto turns the unknown attributes into `data-mark` and `data-mark-steps`
-	-- on the outer `div.sourceCode` by itself — which is exactly where
-	-- code-mark.js looks for them.
+	-- Quarto turns the unknown attributes into `data-mark`, `data-mark-steps` and
+	-- `data-mark-annotations` on the outer `div.sourceCode` by itself — which is
+	-- exactly where code-mark.js looks for them.
 	return cb
 end

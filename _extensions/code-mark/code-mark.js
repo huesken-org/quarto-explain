@@ -11,6 +11,13 @@
 // first gets `code-mark-start`, the last `code-mark-end`. Together with the
 // edges from code-mark.css that reads as one continuous box.
 //
+// `data-mark-annotations` is the website counterpart: there the whole block is
+// shown at once, so a mark is bound to *its* explanation instead of to a step —
+// one segment per numbered annotation, in badge order. The wrappers carry that
+// number as `data-explain-for`, which is what explain-code.js toggles
+// `explain-active` on while the annotation is hovered; code-mark.css keeps the
+// box invisible until then.
+//
 // On slides this runs **after** Quarto's line-highlight plugin: that clones the
 // whole <code> node once per `|` step, and the clones sit in step order in the
 // DOM. `data-mark-steps` hangs off exactly that: one mark per step, in the same
@@ -59,14 +66,20 @@
 		var n;
 		while ((n = walker.nextNode())) {
 			// The line numbers hang off an empty <a> as ::before — its text nodes
-			// (if any) are not part of the code.
-			if (!(n.parentNode && n.parentNode.tagName === "A")) out.push(n);
+			// (if any) are not part of the code. The badges explain-code.js hangs
+			// on a line are not either, and it may well have run before us.
+			var parent = n.parentNode;
+			if (!parent) continue;
+			if (parent.tagName === "A") continue;
+			if (parent.classList && parent.classList.contains("explain-marker")) continue;
+			out.push(n);
 		}
 		return out;
 	}
 
-	// Wraps every occurrence of `needle` below `root`.
-	function wrapOccurrences(root, needle) {
+	// Wraps every occurrence of `needle` below `root`. `owner`, if given, is the
+	// number of the annotation the mark belongs to.
+	function wrapOccurrences(root, needle, owner) {
 		var nodes = textNodes(root);
 		if (!nodes.length) return;
 
@@ -113,6 +126,7 @@
 
 				var span = document.createElement("span");
 				span.className = "code-mark";
+				if (owner) span.setAttribute("data-explain-for", owner);
 				if (ns + localStart === hs) span.classList.add("code-mark-start");
 				if (ns + localEnd === he) span.classList.add("code-mark-end");
 				mid.parentNode.insertBefore(span, mid);
@@ -133,9 +147,9 @@
 		var lines = lineSpans(code);
 		entries.forEach(function (e) {
 			if (e.line) {
-				if (lines[e.line - 1]) wrapOccurrences(lines[e.line - 1], e.needle);
+				if (lines[e.line - 1]) wrapOccurrences(lines[e.line - 1], e.needle, e.owner);
 			} else {
-				wrapOccurrences(code, e.needle);
+				wrapOccurrences(code, e.needle, e.owner);
 			}
 		});
 	}
@@ -166,6 +180,24 @@
 			var codes = div.querySelectorAll("pre code");
 			steps.forEach(function (step, i) {
 				add(codes[i], parseSpec(step));
+			});
+		});
+
+		// Per annotation (website): the i-th segment belongs to badge number i,
+		// and the mark is only shown while that badge or its explanation is
+		// hovered. An annotation without a mark still has its (empty) segment.
+		document.querySelectorAll("div.sourceCode[data-mark-annotations]").forEach(function (div) {
+			var notes = splitEscaped(div.getAttribute("data-mark-annotations"), "|");
+			div.querySelectorAll("pre code").forEach(function (code) {
+				notes.forEach(function (note, i) {
+					add(
+						code,
+						parseSpec(note).map(function (e) {
+							e.owner = String(i + 1);
+							return e;
+						}),
+					);
+				});
 			});
 		});
 

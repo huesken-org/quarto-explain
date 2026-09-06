@@ -4,7 +4,7 @@ filters: [explain, stepper, code-mark]
 title: mark per step on the website
 ---
 
-## No steps, so the marks are merged
+## One segment per numbered explanation
 
 ::: {.explain-code}
 ```{.go}
@@ -14,6 +14,23 @@ b.cells[row][col] = p
 
 :::: {lines="1" mark="freeRow"}
 The search.
+::::
+
+:::: {lines="2" mark="b.cells"}
+The access.
+::::
+:::
+
+## A step without `lines=` has nothing to hover
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+b.cells[row][col] = p
+```
+
+:::: {mark="freeRow"}
+No number, so this one is shown from the start.
 ::::
 
 :::: {lines="2" mark="b.cells"}

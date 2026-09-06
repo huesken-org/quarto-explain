@@ -26,7 +26,8 @@ local _explain = dofile(pandoc.path.directory(PANDOC_SCRIPT_FILE) .. "/explain-u
 --
 -- website: an *annotated* block instead (`render_annotated`) — explain-code.js
 -- hangs a numbered badge on every referenced line and links it to the
--- explanation below. Quarto's own code annotations cannot express this: they
+-- explanation below; hovering either shows the lines of that step and its
+-- `mark=` (see `collect_marks`). Quarto's own code annotations cannot express this: they
 -- bind one annotation to one line, in ascending order, while a step here marks
 -- several lines, often non-contiguous, and two steps may share a line.
 --
@@ -42,19 +43,34 @@ local _explain = dofile(pandoc.path.directory(PANDOC_SCRIPT_FILE) .. "/explain-u
 -- middle on the slides but at the bottom on the website — write it last if you
 -- want it last.
 
--- All step marks as one `;` list (website). `.comment` is left out — it is not
--- in the annotation list there, so its `mark` has no effect, as for `lines`.
+-- The step marks for the website, in two groups.
+--
+-- A step with `lines=` is numbered there and can be hovered, so its mark can
+-- follow that: it goes into `mark-annotations`, one `|` segment per number, in
+-- badge order, and code-mark.js only shows it while its annotation is active.
+-- A step without one has nothing to hover — its mark joins the `;` list that is
+-- merged into `mark` and stays visible. `.comment` is left out entirely: it is
+-- not in the annotation list, so its `mark` has no effect, as for `lines`.
+--
+-- Returns the two lists, each nil when it holds no mark.
 local function collect_marks(explanations)
-	local out = {}
+	local annotated, always = {}, {}
+	local has_annotated = false
 	for _, exp in ipairs(explanations) do
-		if not exp.is_comment and exp.mark and exp.mark ~= "" then
-			table.insert(out, exp.mark)
+		if not exp.is_comment then
+			local mark = exp.mark or ""
+			if exp.lines and exp.lines ~= "" then
+				-- An unmarked step still gets its segment: the segments are read
+				-- by position, and a gap would shift every number after it.
+				table.insert(annotated, _explain.escape_pipes(mark))
+				has_annotated = has_annotated or mark ~= ""
+			elseif mark ~= "" then
+				table.insert(always, mark)
+			end
 		end
 	end
-	if #out == 0 then
-		return nil
-	end
-	return table.concat(out, ";")
+	return (#always > 0) and table.concat(always, ";") or nil,
+		has_annotated and table.concat(annotated, "|") or nil
 end
 
 local comment_div, partition = _explain.comment_div, _explain.partition
@@ -179,11 +195,13 @@ local function explain_code(el)
 			stylesheets = { "explain-code.css" },
 			scripts = { "explain-code.js" },
 		})
-		-- Everything is shown at once here, so the marks merge into one.
-		local marks = collect_marks(explanations)
-		if marks then
+		local always, annotated = collect_marks(explanations)
+		if always then
 			local existing = code_block.attributes["mark"]
-			code_block.attributes["mark"] = (existing and existing ~= "") and (existing .. ";" .. marks) or marks
+			code_block.attributes["mark"] = (existing and existing ~= "") and (existing .. ";" .. always) or always
+		end
+		if annotated then
+			code_block.attributes["mark-annotations"] = annotated
 		end
 		return render_annotated(code_block, explanations, intro_block)
 	end

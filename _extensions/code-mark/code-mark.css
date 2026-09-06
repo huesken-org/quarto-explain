@@ -32,3 +32,18 @@
   padding-right: 0.15em;
   margin-right: -0.15em;
 }
+
+/* Inside `.explain-code` on the website the mark belongs to one numbered
+   explanation, and shows only while that one is hovered — explain-code.js sets
+   `explain-active` on the wrapper together with the lines of the step (both
+   answer to `data-explain-for`). Only the colour goes: the box keeps its space,
+   so the code does not move when it appears. */
+
+.code-mark[data-explain-for] {
+  border-color: transparent;
+  transition: border-color 0.12s ease;
+}
+
+.code-mark[data-explain-for].explain-active {
+  border-color: #cc0000;
+}

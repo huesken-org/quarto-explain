@@ -252,8 +252,11 @@ One field of the row.
 ```
 
 Those are collected into one `mark-steps` attribute whose `|`-segments line up
-with `code-line-numbers` — one mark per step on the slides, merged on the
-website, where everything shows at once.
+with `code-line-numbers` — one mark per step on the slides. The website gets a
+`mark-annotations` instead, one segment per numbered explanation: the box is
+drawn but stays invisible until that explanation or its badge is hovered, so a
+block with many steps is not covered in boxes at rest. A mark on a step without
+`lines=` has nothing to hover and is simply always shown.
 
 The box is drawn at runtime by `code-mark.js`: a hit regularly runs across
 several syntax-highlighting spans, which a filter cannot see. LaTeX gets

@@ -105,7 +105,8 @@ An f-string interpolates both names.
 ## `mark=` — a spot inside a line
 
 `lines=` takes whole lines; `mark=` boxes a piece of text inside one. On the
-slides one mark per step, on the website merged.
+slides one mark per step; here the box appears with the explanation it belongs
+to — hover a number below or next to the code.
 
 ::: {.explain-code}
 ```{.py}
