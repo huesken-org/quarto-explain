@@ -1,0 +1,32 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: line names beside the animation
+---
+
+## Borrow
+
+The manim block keeps its code untouched; only the other block loses its
+`<line=…>` comments.
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("borrow")
+```
+
+```{.rust}
+fn main() {
+    let b = Board::new(); // <line=own>
+    take(b);              // <line=own>
+}
+```
+
+:::: {lines="own" section="borrow"}
+Ownership moves into the function.
+::::
+:::

@@ -69,6 +69,188 @@ function M.add_css()
 	end
 end
 
+-- Line names: a line of code may end in a comment `<line=name>`, and `lines=`
+-- (`lines1=`/`lines2=`) may then use the name in place of numbers:
+--
+--     ```{.go}
+--     row := b.freeRow(col)  // <line=find>
+--     if row < 0 {           // <line=full>
+--         return ErrColumnFull
+--     }                      // <line=full>
+--     ```
+--     :::: {lines="full,2"}
+--
+-- A name stands for every line carrying it. The comment is removed from the
+-- displayed code, together with the whitespace in front of it — before
+-- `code-mark` searches the code and before anything counts lines.
+--
+-- How the comment is written depends on the language, taken from the code
+-- block's first class. A language missing from the table accepts every syntax
+-- listed here.
+
+local LINE_COMMENT = {
+	["//"] = { "c", "cpp", "cs", "csharp", "d", "dart", "fsharp", "go", "groovy", "java",
+		"javascript", "js", "jsx", "kotlin", "objectivec", "php", "rust", "scala", "swift",
+		"ts", "tsx", "typescript", "zig" },
+	["#"] = { "bash", "cmake", "dockerfile", "elixir", "julia", "make", "makefile", "nim",
+		"perl", "powershell", "py", "python", "r", "ruby", "sh", "shell", "toml", "yaml", "yml", "zsh" },
+	["--"] = { "ada", "elm", "haskell", "lua", "sql" },
+	["%"] = { "erlang", "latex", "matlab", "prolog", "tex" },
+	[";"] = { "asm", "clojure", "commonlisp", "ini", "lisp", "scheme" },
+}
+
+local BLOCK_COMMENT = {
+	{ "/*", "*/", { "css", "less", "scss" } },
+	{ "<!--", "-->", { "html", "markdown", "md", "svg", "xml" } },
+	{ "(*", "*)", { "ocaml", "pascal" } },
+}
+
+-- language -> list of { open, close }; `close` is "" for a line comment
+local COMMENT_SYNTAX = {}
+local ALL_SYNTAX = {}
+for open, langs in pairs(LINE_COMMENT) do
+	table.insert(ALL_SYNTAX, { open, "" })
+	for _, lang in ipairs(langs) do
+		COMMENT_SYNTAX[lang] = { { open, "" } }
+	end
+end
+for _, entry in ipairs(BLOCK_COMMENT) do
+	table.insert(ALL_SYNTAX, { entry[1], entry[2] })
+	for _, lang in ipairs(entry[3]) do
+		COMMENT_SYNTAX[lang] = { { entry[1], entry[2] } }
+	end
+end
+-- Longest first, so `--` wins over a shorter opener that is a prefix of the
+-- text; sorted at all because `pairs` above has no defined order.
+table.sort(ALL_SYNTAX, function(a, b)
+	if #a[1] ~= #b[1] then
+		return #a[1] > #b[1]
+	end
+	return a[1] < b[1]
+end)
+
+local NAME = "[%w_%-]+"
+
+local function pattern_escape(s)
+	return (s:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
+end
+
+-- Quarto hands pandoc a temporary intermediate file, so `PANDOC_STATE.input_files`
+-- points into /tmp. `quarto.doc.input_file` knows the real path but is not there
+-- in every version — hence the fallback. (Same as in code-mark.lua.)
+local function input_file()
+	local ok, path = pcall(function()
+		return quarto.doc.input_file
+	end)
+	if ok and type(path) == "string" and path ~= "" then
+		return path
+	end
+	if PANDOC_STATE ~= nil and PANDOC_STATE.input_files ~= nil and #PANDOC_STATE.input_files > 0 then
+		return PANDOC_STATE.input_files[1]
+	end
+	return "<unknown file>"
+end
+
+-- Aborts the render with a readable message, in the shape code-mark uses.
+local function fail_lines(code_block, reason, spec, hint)
+	local first_line = (code_block.text:match("^%s*([^\n]+)") or ""):match("^%s*(.-)%s*$")
+	io.stderr:write("\n")
+	io.stderr:write("=== explain: " .. reason .. " ===\n")
+	io.stderr:write("  File       : " .. input_file() .. "\n")
+	io.stderr:write("  Code block : " .. first_line .. "\n")
+	if spec then
+		io.stderr:write("  lines      : " .. spec .. "\n")
+	end
+	io.stderr:write("\n  " .. hint .. "\n\n")
+	os.exit(1)
+end
+
+local function language_of(code_block)
+	return code_block.classes[1] and code_block.classes[1]:lower() or nil
+end
+
+-- Removes the `<line=name>` comments from `code_block.text` (in place) and
+-- returns the names: name -> ascending list of line numbers. Aborts on a
+-- `<line=…>` that stays behind because its comment syntax does not fit the
+-- language — it would otherwise end up on the slide.
+function M.take_line_names(code_block)
+	local lang = language_of(code_block)
+	local syntaxes = (lang and COMMENT_SYNTAX[lang]) or ALL_SYNTAX
+
+	local names = {}
+	local out = {}
+	local n = 0
+	local text = code_block.text
+	for line in (text .. "\n"):gmatch("([^\n]*)\n") do
+		n = n + 1
+		for _, syntax in ipairs(syntaxes) do
+			local pattern = "^(.-)%s*" .. pattern_escape(syntax[1]) .. "%s*<line=(" .. NAME .. ")>%s*"
+				.. pattern_escape(syntax[2]) .. "%s*$"
+			local code, name = line:match(pattern)
+			if code then
+				line = code
+				names[name] = names[name] or {}
+				table.insert(names[name], n)
+				break
+			end
+		end
+		if line:match("<line=" .. NAME .. ">%s*%S*%s*$") then
+			local expected = {}
+			for _, syntax in ipairs(syntaxes) do
+				table.insert(expected, "`" .. syntax[1] .. " <line=name>" .. (syntax[2] ~= "" and " " .. syntax[2] or "") .. "`")
+			end
+			fail_lines(code_block, "line " .. n .. ": `<line=…>` not recognised", nil,
+				"Expected a comment at the end of the line: " .. table.concat(expected, " or ")
+				.. "\n  (language: " .. (lang or "none") .. "). Otherwise it would stay in the displayed code.")
+		end
+		table.insert(out, line)
+	end
+	code_block.text = table.concat(out, "\n")
+	return names
+end
+
+-- {2, 3, 4, 7} -> "2-4,7"
+local function as_ranges(numbers)
+	local parts = {}
+	local i = 1
+	while i <= #numbers do
+		local j = i
+		while j < #numbers and numbers[j + 1] == numbers[j] + 1 do
+			j = j + 1
+		end
+		table.insert(parts, i == j and tostring(numbers[i]) or (numbers[i] .. "-" .. numbers[j]))
+		i = j + 1
+	end
+	return table.concat(parts, ",")
+end
+
+-- Replaces the names in a `lines=` spec by their line numbers: "full,2" ->
+-- "3-4,2". Numbers and ranges pass through untouched, nil stays nil.
+function M.resolve_lines(spec, names, code_block)
+	if not spec or spec == "" then
+		return spec
+	end
+	local parts = {}
+	for part in spec:gmatch("[^,]+") do
+		local token = part:match("^%s*(.-)%s*$")
+		if token:match("^%d+$") or token:match("^%d+%s*%-%s*%d+$") then
+			table.insert(parts, token)
+		elseif names[token] then
+			table.insert(parts, as_ranges(names[token]))
+		elseif token ~= "" then
+			local known = {}
+			for name in pairs(names) do
+				table.insert(known, name)
+			end
+			table.sort(known)
+			fail_lines(code_block, "unknown line name: " .. token, spec,
+				"A name is defined by a comment `<line=" .. token .. ">` at the end of a line of this block.\n"
+				.. "  Names in this block: " .. (#known > 0 and table.concat(known, ", ") or "none"))
+		end
+	end
+	return table.concat(parts, ",")
+end
+
 -- Split explanation steps from `.comment`s, keeping the order within each.
 function M.partition(explanations)
 	local steps, comments = {}, {}

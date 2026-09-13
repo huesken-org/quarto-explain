@@ -1,0 +1,18 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a misspelt name must not stay silent
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col) // <line=find>
+b.cells[row][col] = p // <line=place>
+```
+
+:::: {lines="fnd"}
+Find a free row.
+::::
+:::

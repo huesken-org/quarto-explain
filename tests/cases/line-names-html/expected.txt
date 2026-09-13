@@ -1,0 +1,48 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">line names on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<div class="explain-annotated">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode py code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>count <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> rows:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> row.amount</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    count <span class="op">+=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="explain-annotations">
+<div class="explain-annotation" data-lines="1-2" data-index="1">
+<p>Start at zero.</p>
+</div>
+<div class="explain-annotation" data-lines="3,4-5" data-index="2">
+<p>Add up every row.</p>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain-code.css
+explain-code.js
+explain.css
+--- warnings

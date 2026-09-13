@@ -69,6 +69,15 @@ local function explain_parallel_code(el)
 
 	local code1 = code_blocks[1]
 	local code2 = code_blocks[2]
+
+	-- Each block has its own `<line=name>`s: `lines1=` resolves against the
+	-- first, `lines2=` against the second.
+	local names1 = _explain.take_line_names(code1)
+	local names2 = _explain.take_line_names(code2)
+	for _, exp in ipairs(explanations) do
+		exp.lines1 = _explain.resolve_lines(exp.lines1, names1, code1)
+		exp.lines2 = _explain.resolve_lines(exp.lines2, names2, code2)
+	end
 	local steps, comments = _explain.partition(explanations)
 
 	-- latex: both listings with line numbers, the explanations as a list. Each

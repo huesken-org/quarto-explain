@@ -1,0 +1,45 @@
+--- exit 1
+--- content 
+--- assets
+--- warnings
+pandoc 
+  to: revealjs
+  output-file: input.html
+  standalone: true
+  wrap: none
+  default-image-extension: png
+  html-math-method:
+    method: mathjax
+    url: >-
+      https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML-full
+  slide-level: 2
+  
+metadata
+  link-citations: true
+  width: 1050
+  height: 700
+  margin: 0.1
+  center: false
+  navigationMode: linear
+  controlsLayout: edges
+  controlsTutorial: false
+  hash: true
+  history: true
+  hashOneBasedIndex: false
+  fragmentInURL: false
+  transition: none
+  backgroundTransition: none
+  pdfSeparateFragments: false
+  lang: en
+  auto-stretch: true
+  title: a name in the wrong comment syntax must not reach the slide
+  
+
+=== explain: line 1: `<line=…>` not recognised ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col) # <line=find>
+
+  Expected a comment at the end of the line: `// <line=name>`
+  (language: go). Otherwise it would stay in the displayed code.
+
+WARN: Error encountered when rendering files

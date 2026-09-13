@@ -182,6 +182,12 @@ local function explain_code(el)
 		return nil
 	end
 
+	-- `<line=name>` comments out of the code, names in `lines=` into numbers.
+	local names = _explain.take_line_names(code_block)
+	for _, exp in ipairs(explanations) do
+		exp.lines = _explain.resolve_lines(exp.lines, names, code_block)
+	end
+
 	if quarto.doc.is_format("latex") then
 		return render_latex(code_block, explanations, intro_block)
 	end

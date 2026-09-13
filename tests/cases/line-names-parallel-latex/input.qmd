@@ -1,0 +1,29 @@
+---
+format: latex
+filters: [explain, stepper]
+title: line names per block, in their own comment syntax
+---
+
+## Output
+
+::: {.explain-parallel-code}
+```{.lua filename="Worker"}
+local n = 0      -- <line=start>
+n = n + 1        -- <line=work>
+print(n)
+```
+
+```{.css filename="Style"}
+.a { color: red; }   /* <line=start> */
+.b { color: blue; }
+.c { color: green; } /*<line=work>*/
+```
+
+:::: {lines1="start" lines2="start"}
+Both begin.
+::::
+
+:::: {lines1="work,3" lines2="work"}
+Both work.
+::::
+:::

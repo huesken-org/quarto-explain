@@ -78,6 +78,35 @@ The first hit wins.
 ::::
 :::
 
+## Line names instead of numbers
+
+A comment `<line=name>` at the end of a line names it; `lines=` takes the name.
+Several lines may share one, and the comments do not reach the output.
+
+::: {.explain-code}
+```{.py}
+def mean(rows):
+    total = 0          # <line=init>
+    count = 0          # <line=init>
+    for row in rows:
+        total += row.value  # <line=accumulate>
+        count += 1          # <line=accumulate>
+    return total / count
+```
+
+:::: {lines="init"}
+Two counters, both at zero.
+::::
+
+:::: {lines="4,accumulate"}
+Every row feeds both.
+::::
+
+:::: {lines="7"}
+Names and numbers mix freely.
+::::
+:::
+
 ## `.intro` and `.comment`
 
 `.intro` is step 0 on the slides and a paragraph above the block elsewhere;

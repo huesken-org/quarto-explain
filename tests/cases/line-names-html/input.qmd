@@ -1,0 +1,25 @@
+---
+format: html
+filters: [explain, stepper]
+title: line names on the website
+---
+
+## Output
+
+::: {.explain-code}
+```{.py}
+total = 0             # <line=init>
+count = 0             # <line=init>
+for row in rows:
+    total += row.amount  # <line=add>
+    count += 1           # <line=add>
+```
+
+:::: {lines="init"}
+Start at zero.
+::::
+
+:::: {lines="3,add"}
+Add up every row.
+::::
+:::

@@ -1,0 +1,18 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a name in the wrong comment syntax must not reach the slide
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col) # <line=find>
+b.cells[row][col] = p
+```
+
+:::: {lines="1"}
+Find a free row.
+::::
+:::

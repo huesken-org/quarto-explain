@@ -122,7 +122,7 @@ Add up every row.
 
 | Attribute/class | Effect |
 |---|---|
-| `lines="3-5,7"` | lines of the step; without it the step highlights nothing |
+| `lines="3-5,7"` | lines of the step, by number or [name](#line-names); without it the step highlights nothing |
 | `mark="text"` | mark part of a line (see `code-mark`) |
 | `layout="[0.5, 0.5]"` | column ratio (RevealJS) |
 | `.below` | code on top at full width, explanations underneath |
@@ -157,6 +157,40 @@ Two child divs, in all four constructs:
 
 `.comment` keeps its other classes and attributes. `.comment .hide-code` hides
 the code while the comment shows, leaving it the full width (slides only).
+
+### Line names
+
+Instead of counting lines, end them with a comment `<line=name>` and use the
+name in `lines=` (`lines1=`/`lines2=`). A name stands for every line carrying it
+and mixes with numbers:
+
+````markdown
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col) // <line=find>
+if row < 0 {          // <line=full>
+    return ErrColumnFull
+}                     // <line=full>
+```
+
+:::: {lines="full,3"}
+Report a full column.
+::::
+:::
+````
+
+The comments are removed from the output, so the reader sees neither them nor
+the whitespace in front of them, and `mark=` searches the code without them.
+
+The comment syntax follows the block's language (its first class): `//` for Go,
+Rust, C, Java, JavaScript …, `#` for Python, R, shell, YAML …, `--` for Lua, SQL,
+Haskell, `%` for LaTeX and Matlab, `;` for Lisps, `/* */` for CSS and `<!-- -->`
+for HTML/XML. A language not in the table (`explain-util.lua`) accepts all of
+them. With `.explain-parallel-code` each block has its own names.
+
+The render aborts on a name `lines=` uses but no line defines, and on a
+`<line=…>` whose comment syntax does not fit the language — it would otherwise
+stay in the displayed code.
 
 ## `stepper`
 

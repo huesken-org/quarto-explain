@@ -1,0 +1,36 @@
+---
+format: revealjs
+filters: [explain, stepper, code-mark]
+title: line names in the deck
+---
+
+## One move
+
+A name shared by several lines stands for all of them, and mixes with numbers.
+The comments are gone from the slide; `mark=` searches the code without them.
+
+::: {.explain-code}
+```{.go}
+func (b *Board) Drop(col int, p Player) error {
+	row := b.freeRow(col) // <line=find>
+	if row < 0 {          //<line=full>
+		return ErrColumnFull
+	}                     // <line=full>
+	url := "http://example.org" // <line=place>
+	b.cells[row][col] = p // <line=place>
+	return nil
+}
+```
+
+:::: {lines="find" mark="freeRow"}
+Find a free row.
+::::
+
+:::: {lines="full,4"}
+Report a full column.
+::::
+
+:::: {lines="place, 8"}
+Place the piece.
+::::
+:::
