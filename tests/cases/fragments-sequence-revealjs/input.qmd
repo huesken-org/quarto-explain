@@ -1,0 +1,159 @@
+---
+format: revealjs
+filters: [explain, manim, stepper]
+title: one fragment sequence per slide
+---
+
+## Two steppers, the second in a fragment
+
+A starts at 0; the wrapper appears once A is through, B only steps after that.
+
+::: {.explain-code}
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {lines="1"}
+A one.
+::::
+
+:::: {lines="2"}
+A two.
+::::
+:::
+
+::: {.fragment}
+::: {.explain-code}
+```{.py}
+c = 3
+d = 4
+```
+
+:::: {lines="1"}
+B one.
+::::
+
+:::: {lines="2"}
+B two.
+::::
+:::
+:::
+
+## Fragments and a pause around a stepper
+
+::: {.fragment}
+Before.
+:::
+
+. . .
+
+::: {.explain-code}
+```{.py}
+c = 3
+d = 4
+```
+
+:::: {.intro}
+Intro.
+::::
+
+:::: {lines="1"}
+C one.
+::::
+
+:::: {lines="2"}
+C two.
+::::
+:::
+
+After, [inline]{.fragment}.
+
+## A stack after a fragment, an explicit index kept
+
+::: {.fragment}
+First.
+:::
+
+::: {.r-stack-fragments}
+::: {}
+Layer one.
+:::
+
+::: {}
+Layer two.
+:::
+:::
+
+::: {.fragment fragment-index="7"}
+Explicit.
+:::
+
+## The videos of a second stepper
+
+`data-play-on` moves with the stepper: its sections play at steps 3 and 4 of
+the slide.
+
+::: {.explain-code}
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {lines="1"}
+One.
+::::
+
+:::: {lines="2"}
+Two.
+::::
+:::
+
+::: {.explain-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("one")
+        self.next_section("two")
+```
+
+:::: {section="one"}
+Section one.
+::::
+
+:::: {section="two"}
+Section two.
+::::
+:::
+
+## A single-step stepper before a fragment
+
+Its only caption stays instead of fading out; the fragment after it takes
+index 0.
+
+::: {.explain-code}
+```{.py}
+rows = load(path)
+```
+
+:::: {lines="1"}
+Only step.
+::::
+:::
+
+::: {.fragment}
+Then this.
+:::
+
+## No stepper: left alone
+
+::: {.fragment}
+Untouched.
+:::
+
+. . .
+
+Also untouched.

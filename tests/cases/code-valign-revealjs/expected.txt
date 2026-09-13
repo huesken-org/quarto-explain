@@ -1,0 +1,62 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">layout-valign aligns the steps too</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="top" class="slide level2">
+<h2>Top</h2>
+<p>The caption stack gets <code>gravity-top</code>: the short step sits at the top edge of the box the long one spans, level with the code.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1|2-4"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a><span class="cf">if</span> row <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a>    <span class="cf">return</span> ErrColumnFull</span>
+<span id="cb1-4"><a href="" aria-label="4"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack gravity-top quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Short.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>A long one.</p>
+<p>It has a second paragraph, so the stack is as tall as this.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="bottom-with-.below" class="slide level2">
+<h2>Bottom, with <code>.below</code></h2>
+<div class="stepper">
+<div class="explain-below">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-code-fragment-index="0" data-code-line-numbers="1|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb2-1"><a href="" aria-label="1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="r-stack gravity-bottom">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Short.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>A long one.</p>
+<p>It has a second paragraph.</p>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

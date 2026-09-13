@@ -148,7 +148,10 @@ end
 --                                            the content IN @ appear, the outer
 --                                            .fragment.fade-out hides it @ disappear
 -- show-from / hide-from are kept as data-* for the (later) script.
-local function step_to_fragment(d)
+--
+-- The step numbers are the stepper's own; `start` is the fragment index its
+-- first step change has on the slide (see `sequence_slides`).
+local function step_to_fragment(d, start)
 	if not d.classes:includes("step") then
 		return d
 	end
@@ -158,30 +161,33 @@ local function step_to_fragment(d)
 
 	local appear = (tonumber(sf) or 0) - 1
 	local disappear = hf and (tonumber(hf) - 1) or nil
+	local function at(i)
+		return tostring(i + (start or 0))
+	end
 
 	if appear < 0 then
 		if disappear ~= nil then
 			d.classes:insert("fragment")
 			d.classes:insert("fade-out")
-			d.attributes["data-fragment-index"] = tostring(disappear)
+			d.attributes["data-fragment-index"] = at(disappear)
 		end
 		-- else: always visible, leave as-is
 	elseif disappear == nil then
 		d.classes:insert("fragment")
-		d.attributes["data-fragment-index"] = tostring(appear)
+		d.attributes["data-fragment-index"] = at(appear)
 	elseif disappear <= appear + 1 then
 		d.classes:insert("fragment")
 		d.classes:insert("current-visible")
-		d.attributes["data-fragment-index"] = tostring(appear)
+		d.attributes["data-fragment-index"] = at(appear)
 	else
 		local inner = pandoc.Div(
 			d.content,
-			pandoc.Attr("", { "fragment" }, { ["data-fragment-index"] = tostring(appear) })
+			pandoc.Attr("", { "fragment" }, { ["data-fragment-index"] = at(appear) })
 		)
 		d.content = { inner }
 		d.classes:insert("fragment")
 		d.classes:insert("fade-out")
-		d.attributes["data-fragment-index"] = tostring(disappear)
+		d.attributes["data-fragment-index"] = at(disappear)
 	end
 
 	return d
@@ -195,9 +201,9 @@ end
 -- `data-code-fragment-index` on the `div.sourceCode`, and stepper-revealjs.js
 -- applies it to the clones that Quarto's line-highlight plugin makes. See the
 -- long comment there for why the plugin cannot pick it up by itself.
-local function add_code_fragment(cb)
+local function add_code_fragment(cb, start)
 	if cb.attributes["code-line-numbers"] then
-		cb.attributes["code-fragment-index"] = "0"
+		cb.attributes["code-fragment-index"] = tostring(start or 0)
 	end
 	return cb
 end
@@ -215,7 +221,10 @@ end
 -- (stepper-revealjs.css); `no_transition` swaps reveal's cross-fade for an
 -- instant switch, which is what stacked video wants.
 local function fragment_stack(children, start, no_transition, gravity)
-	for i, child in ipairs(children) do
+	-- A single layer has nothing to give way to: it stays as it is. As a fade-out
+	-- fragment it would vanish on the next click and take a fragment index of the
+	-- slide with it.
+	for i, child in ipairs(#children > 1 and children or {}) do
 		local first = i == 1
 		child.classes:insert("fragment")
 		child.classes:insert(first and "fade-out" or "current-visible")
@@ -237,13 +246,15 @@ local function as_layer(blocks)
 	return blocks[1].t == "Div" and blocks[1] or pandoc.Div(blocks, pandoc.Attr(""))
 end
 
--- Turn a .step-control div into an overlapping caption stack.
-local function build_control_reveal(div)
+-- Turn a .step-control div into an overlapping caption stack, its first change
+-- at fragment index `start`. `gravity` on the div aligns captions of different
+-- heights with each other (explain-code sets it from `layout-valign`).
+local function build_control_reveal(div, start)
 	local children = pandoc.List()
 	for _, blocks in ipairs(control_children(div)) do
 		children:insert(as_layer(blocks))
 	end
-	return fragment_stack(children, 0)
+	return fragment_stack(children, start or 0, false, div.attributes["gravity"])
 end
 
 -- ----------------------------------------------------------------------------
@@ -266,13 +277,16 @@ end
 --
 -- | attribute / class | effect |
 -- |---|---|
--- | `fragment-index="N"` | index of the first layer, so the stack can join an existing fragment sequence (default 0) |
+-- | `fragment-index="N"` | index of the first layer (default: the next one in the slide's sequence, see `sequence_slides`) |
 -- | `gravity="top\|center\|bottom"` | which edge the layers align to (default `center`, reveal's own) |
 -- | `.no-transition` | replace the cross-fade with an instant switch |
 --
 -- A child div becomes one layer and keeps its classes and attributes; any other
 -- block gets wrapped in one. Blank paragraphs between fenced divs are skipped.
-local function render_r_stack_fragments(el)
+--
+-- On revealjs `start` is the index of the first layer, chosen by the caller:
+-- `fragment-index`, or the next free index of the slide (see `sequence_slides`).
+local function render_r_stack_fragments(el, start)
 	-- Outside revealjs there are no fragments to stack: the children simply
 	-- follow one another. The div is kept (minus the marker class) so an id or a
 	-- class of the author's survives into the output.
@@ -304,13 +318,17 @@ local function render_r_stack_fragments(el)
 
 	return fragment_stack(
 		children,
-		tonumber(el.attributes["fragment-index"]) or 0,
+		start or 0,
 		el.classes:includes("no-transition"),
 		el.attributes["gravity"]
 	)
 end
 
-local function render_reveal(el)
+-- `start`: the slide's fragment index of the stepper's first step change. The
+-- stepper's own step numbers — `show-from`, the caption and highlight sequence,
+-- a nested stack's `fragment-index` — all count from there.
+local function render_reveal(el, start)
+	start = start or 0
 	quarto.doc.add_html_dependency({
 		name = "stepper-revealjs",
 		version = "0.1.0",
@@ -319,16 +337,31 @@ local function render_reveal(el)
 	})
 
 	-- Walk the whole subtree so the code block / .step-control / .step elements
-	-- are found at any depth (they may be wrapped in a layout div).
+	-- are found at any depth (they may be wrapped in a layout div). The walk is
+	-- bottom-up, so a nested `.r-stack-fragments` is a stack before the `.step`
+	-- around it is looked at.
 	return el:walk({
 		CodeBlock = function(cb)
-			return add_code_fragment(cb)
+			return add_code_fragment(cb, start)
+		end,
+		-- manim's section videos carry the step they play at in `data-play-on`;
+		-- stepper-video.js compares it with the slide's fragment index.
+		RawInline = function(raw)
+			if raw.format == "html" then
+				raw.text = (raw.text:gsub('data%-play%-on="(%d+)"', function(n)
+					return 'data-play-on="' .. (tonumber(n) + start) .. '"'
+				end))
+			end
+			return raw
 		end,
 		Div = function(d)
-			if d.classes:includes("step-control") then
-				return build_control_reveal(d)
+			if d.classes:includes("r-stack-fragments") then
+				return render_r_stack_fragments(d, (tonumber(d.attributes["fragment-index"]) or 0) + start)
 			end
-			return step_to_fragment(d)
+			if d.classes:includes("step-control") then
+				return build_control_reveal(d, start)
+			end
+			return step_to_fragment(d, start)
 		end,
 	})
 end
@@ -439,19 +472,191 @@ local function render_latex(el)
 	})
 end
 
+-- ----------------------------------------------------------------------------
+-- revealjs: one fragment sequence per slide.
+--
+-- Reveal sorts all fragments of a slide together by `data-fragment-index` and
+-- plays those without one after all the others. A stepper numbered on its own
+-- starts at 0, so two on one slide stepped at the same time, and a `.fragment`
+-- around one appeared only after all its steps. Hence a slide is numbered as a
+-- whole, in document order:
+--
+--   * a `.stepper` or `.r-stack-fragments` takes the next indices it needs
+--   * a `.fragment` div or span takes one, and what it contains follows it
+--   * `. . .` becomes the fragment pandoc would make of it, but with an index
+--   * an explicit `fragment-index` is kept; counting resumes after it
+--
+-- Counting restarts on every slide and leaves no gaps: the `data-play-on` of a
+-- section video is compared with the slide's fragment index. Slides without a
+-- stepper or `.r-stack-fragments` are not touched. Incremental lists cannot take
+-- part — their items become fragments in the writer, after this filter.
+
+local function is_pause(blk)
+	return blk.t == "Para" and pandoc.utils.stringify(blk) == ". . ."
+end
+
+local function explicit_index(attr)
+	return tonumber(attr.attributes["fragment-index"] or attr.attributes["data-fragment-index"])
+end
+
+-- The highest fragment index a rendered construct uses, nil if none. The code
+-- highlight fragments do not exist yet — line-highlight clones them in the
+-- browser — so they are counted from `code-line-numbers`: one per segment after
+-- the first, from `code-fragment-index` on.
+local function last_index(el)
+	local last = nil
+	local function note(i)
+		if i and (last == nil or i > last) then
+			last = i
+		end
+	end
+	el:walk({
+		Div = function(d)
+			note(tonumber(d.attributes["data-fragment-index"]))
+		end,
+		CodeBlock = function(cb)
+			local first = tonumber(cb.attributes["code-fragment-index"])
+			local spec = cb.attributes["code-line-numbers"]
+			if first and spec then
+				local _, bars = spec:gsub("|", "")
+				if bars > 0 then
+					note(first + bars - 1)
+				end
+			end
+		end,
+	})
+	return last
+end
+
+local function advance(state, last)
+	if last and last + 1 > state.next then
+		state.next = last + 1
+	end
+end
+
+-- A `.fragment` div or span: keeps an explicit index, or takes the next one.
+local function claim(el, state)
+	local explicit = explicit_index(el.attr)
+	if explicit then
+		advance(state, explicit)
+	else
+		el.attributes["data-fragment-index"] = tostring(state.next)
+		state.next = state.next + 1
+	end
+end
+
+local sequence_blocks
+
+local function sequence_block(blk, state)
+	if blk.t ~= "Div" then
+		-- `[text]{.fragment}` in a paragraph, a list, a table … Top-down, so an
+		-- outer span comes before the one inside it.
+		return blk:walk({
+			traverse = "topdown",
+			Span = function(s)
+				if s.classes:includes("fragment") then
+					claim(s, state)
+				end
+				return s
+			end,
+		})
+	end
+	if blk.classes:includes("stepper") then
+		local out = render_reveal(blk, state.next)
+		advance(state, last_index(out))
+		return out
+	end
+	if blk.classes:includes("r-stack-fragments") then
+		local out = render_r_stack_fragments(blk, explicit_index(blk.attr) or state.next)
+		advance(state, last_index(out))
+		return out
+	end
+	if blk.classes:includes("fragment") then
+		claim(blk, state)
+	end
+	blk.content = sequence_blocks(blk.content, state)
+	return blk
+end
+
+function sequence_blocks(blocks, state)
+	local out = pandoc.List()
+	local i = 1
+	while i <= #blocks do
+		if is_pause(blocks[i]) then
+			-- what follows, up to the next pause
+			local rest = pandoc.List()
+			i = i + 1
+			while i <= #blocks and not is_pause(blocks[i]) do
+				rest:insert(blocks[i])
+				i = i + 1
+			end
+			local div = pandoc.Div({}, pandoc.Attr("", { "fragment" }, {
+				{ "data-fragment-index", tostring(state.next) },
+			}))
+			state.next = state.next + 1
+			div.content = sequence_blocks(rest, state)
+			out:insert(div)
+		else
+			out:insert(sequence_block(blocks[i], state))
+			i = i + 1
+		end
+	end
+	return out
+end
+
+local function has_construct(blocks)
+	local found = false
+	pandoc.Div(blocks):walk({
+		Div = function(d)
+			if d.classes:includes("stepper") or d.classes:includes("r-stack-fragments") then
+				found = true
+			end
+		end,
+	})
+	return found
+end
+
+-- A slide starts at a heading of the slide level or above, and at `---`.
+local function sequence_slides(doc)
+	if not quarto.doc.is_format("revealjs") then
+		return nil
+	end
+	local level = tonumber(PANDOC_WRITER_OPTIONS and PANDOC_WRITER_OPTIONS.slide_level) or 2
+
+	local blocks = pandoc.Blocks({})
+	local slide = pandoc.List()
+	local function flush()
+		if has_construct(slide) then
+			slide = sequence_blocks(slide, { next = 0 })
+		end
+		blocks:extend(slide)
+		slide = pandoc.List()
+	end
+	for _, blk in ipairs(doc.blocks) do
+		if blk.t == "HorizontalRule" or (blk.t == "Header" and blk.level <= level) then
+			flush()
+		end
+		slide:insert(blk)
+	end
+	flush()
+
+	doc.blocks = blocks
+	return doc
+end
+
 local function stepper(el)
+	-- revealjs is numbered slide by slide instead, see `sequence_slides`.
+	if quarto.doc.is_format("revealjs") then
+		return nil
+	end
 	-- Pandoc applies the filter to inner divs first, so an `.r-stack-fragments`
-	-- nested inside a `.stepper` is already an `.r-stack` by the time we get to
-	-- the stepper around it.
+	-- nested inside a `.stepper` is already rendered by the time we get to the
+	-- stepper around it.
 	if el.classes:includes("r-stack-fragments") then
 		return render_r_stack_fragments(el)
 	end
 	if not el.classes:includes("stepper") then
 		return nil
-	end
-
-	if quarto.doc.is_format("revealjs") then
-		return render_reveal(el)
 	end
 	if quarto.doc.is_format("latex") then
 		return render_latex(el)
@@ -459,10 +664,11 @@ local function stepper(el)
 	return render_html(el)
 end
 
--- Two passes so the configured wording is settled before the first div is
+-- Meta first, so the configured wording is settled before the first div is
 -- processed: within a single filter table the order of Meta and Div is not
--- guaranteed.
+-- guaranteed. Div renders website and LaTeX, the Pandoc pass revealjs.
 return {
 	{ Meta = read_meta },
 	{ Div = stepper },
+	{ Pandoc = sequence_slides },
 }

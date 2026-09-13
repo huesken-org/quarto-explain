@@ -31,7 +31,7 @@
 </div>
 </div>
 <div class="r-stack">
-<div class="fragment fade-out" data-fragment-index="0">
+<div>
 <p>Ownership moves into the function.</p>
 </div>
 </div>

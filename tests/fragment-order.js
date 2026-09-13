@@ -10,8 +10,10 @@
 //
 // So this replays that runtime, in jsdom: the deck's **own** bundled plugin, the
 // `indexCodeFragments()` from the shipped stepper-revealjs.js, and reveal's sort
-// algorithm. Then it asserts the thing that actually matters — every step that
-// moves a code highlight also moves a caption, and vice versa.
+// algorithm. Then it asserts the thing that actually matters — within each
+// stepper, every step that moves a code highlight also moves a caption, and vice
+// versa; and across the slide, steppers, stacks and plain fragments play in
+// document order, whatever sits inside a fragment only after it has appeared.
 //
 //   node tests/fragment-order.js <rendered-deck.html> …
 //
@@ -118,26 +120,71 @@ function check(deckPath, entry) {
 	let checked = 0;
 	slides.forEach((slide) => {
 		const title = ((slide.querySelector("h2") || {}).textContent || "(untitled)").trim() + " [" + entry + "]";
-		const steps = {};
-		sort(slide.querySelectorAll(".fragment")).forEach((f) => {
-			const i = f.getAttribute("data-fragment-index");
-			(steps[i] = steps[i] || []).push(f.tagName === "CODE" ? "code" : "caption");
-		});
-		const keys = Object.keys(steps).sort((a, b) => a - b);
-		if (!keys.some((k) => steps[k].includes("code"))) return; // nothing to pair up
+		const fragments = sort(slide.querySelectorAll(".fragment"));
+		const index = (f) => parseInt(f.getAttribute("data-fragment-index"), 10);
+		const steppers = Array.from(slide.querySelectorAll(".stepper"));
+		if (steppers.length === 0) return;
 		checked += 1;
+		const problems = [];
 
-		const outOfStep = keys.filter((k) => {
-			const both = steps[k].includes("code") && steps[k].includes("caption");
-			return !both;
+		// Within each stepper: every step that moves a code highlight also moves a
+		// caption, and vice versa.
+		steppers.forEach((stepper, n) => {
+			const steps = {};
+			fragments
+				.filter((f) => stepper.contains(f))
+				.forEach((f) => {
+					(steps[index(f)] = steps[index(f)] || []).push(f.tagName === "CODE" ? "code" : "caption");
+				});
+			const keys = Object.keys(steps).sort((a, b) => a - b);
+			if (!keys.some((k) => steps[k].includes("code"))) return; // nothing to pair up
+			if (keys.every((k) => steps[k].includes("code") && steps[k].includes("caption"))) return;
+			problems.push("stepper " + (n + 1) + " out of step:");
+			keys.forEach((k) => problems.push("  step " + (Number(k) + 1) + ": " + steps[k].join(" + ")));
 		});
-		if (outOfStep.length === 0) {
+
+		// Across the slide: steppers, stacks and plain fragments play in document
+		// order, and whatever sits inside a fragment only once it has appeared.
+		// Reveal plays the slide as one sequence, so a stepper that starts at 0 on
+		// its own would run alongside the one before it.
+		const inStepper = (el) => steppers.some((s) => s.contains(el));
+		const units = [];
+		steppers.forEach((s, n) => units.push({ el: s, name: "stepper " + (n + 1) }));
+		fragments
+			.filter((f) => !inStepper(f))
+			.forEach((f) => {
+				const stack = f.parentElement && f.parentElement.classList.contains("r-stack") ? f.parentElement : null;
+				const el = stack || f;
+				if (!units.some((u) => u.el === el)) {
+					units.push({ el, name: stack ? "stack" : "fragment “" + f.textContent.trim().slice(0, 20) + "”" });
+				}
+			});
+		units.forEach((u) => {
+			// A plain fragment is its own index; a stepper or a stack spans its fragments.
+			const indices = u.el.classList.contains("fragment")
+				? [index(u.el)]
+				: fragments.filter((f) => u.el.contains(f)).map(index);
+			u.min = Math.min(...indices);
+			u.max = Math.max(...indices);
+		});
+		const ordered = units
+			.filter((u) => isFinite(u.min))
+			.sort((a, b) => (a.el.compareDocumentPosition(b.el) & window.Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+		for (let i = 0; i + 1 < ordered.length; i++) {
+			const a = ordered[i];
+			const b = ordered[i + 1];
+			if (!(a.max < b.min)) {
+				problems.push(a.name + " (" + a.min + "–" + a.max + ") does not come before " + b.name + " (" + b.min + "–" + b.max + ")");
+			}
+		}
+
+		if (problems.length === 0) {
 			console.log("PASS " + title);
 			return;
 		}
 		failed += 1;
 		console.log("FAIL " + title);
-		keys.forEach((k) => console.log("       step " + (Number(k) + 1) + ": " + steps[k].join(" + ")));
+		problems.forEach((p) => console.log("       " + p));
 	});
 
 	if (checked === 0) {

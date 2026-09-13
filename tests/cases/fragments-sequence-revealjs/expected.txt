@@ -1,0 +1,186 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">one fragment sequence per slide</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="two-steppers-the-second-in-a-fragment" class="slide level2">
+<h2>Two steppers, the second in a fragment</h2>
+<p>A starts at 0; the wrapper appears once A is through, B only steps after that.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="1|2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-label="1"></a>a <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a>b <span class="op">=</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>A one.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>A two.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="1">
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-code-fragment-index="2" data-code-line-numbers="1|2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="" aria-label="1"></a>c <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-2"><a href="" aria-label="2"></a>d <span class="op">=</span> <span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="2">
+<p>B one.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="2">
+<p>B two.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="fragments-and-a-pause-around-a-stepper" class="slide level2">
+<h2>Fragments and a pause around a stepper</h2>
+<div class="fragment" data-fragment-index="0">
+<p>Before.</p>
+</div>
+<div class="fragment" data-fragment-index="1">
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-code-fragment-index="2" data-code-line-numbers="|1|2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="" aria-label="1"></a>c <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb3-2"><a href="" aria-label="2"></a>d <span class="op">=</span> <span class="dv">4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="2">
+<p>Intro.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="2">
+<p>C one.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="3">
+<p>C two.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>After, <span class="fragment" data-fragment-index="4">inline</span>.</p>
+</div>
+</section>
+<section id="a-stack-after-a-fragment-an-explicit-index-kept" class="slide level2">
+<h2>A stack after a fragment, an explicit index kept</h2>
+<div class="fragment" data-fragment-index="0">
+<p>First.</p>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="1">
+<p>Layer one.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>Layer two.</p>
+</div>
+</div>
+<div class="fragment" data-fragment-index="7">
+<p>Explicit.</p>
+</div>
+</section>
+<section id="the-videos-of-a-second-stepper" class="slide level2">
+<h2>The videos of a second stepper</h2>
+<p><code>data-play-on</code> moves with the stepper: its sections play at steps 3 and 4 of the slide.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-code-fragment-index="0" data-code-line-numbers="1|2"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-label="1"></a>a <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-2"><a href="" aria-label="2"></a>b <span class="op">=</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>One.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Two.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row">
+<div class="explain-manim-animation quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="r-stack manim-stack">
+<div class="step no-transition" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_one.mp4" type="video/mp4"></video>
+</div>
+<div class="step no-transition fragment" data-show-from="1" data-fragment-index="1">
+<video muted="" playsinline="" preload="auto" data-play-on="2" width="1344" height="700" style="height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_two.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="1">
+<p>Section one.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>Section two.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-single-step-stepper-before-a-fragment" class="slide level2">
+<h2>A single-step stepper before a fragment</h2>
+<p>Its only caption stays instead of fading out; the fragment after it takes index 0.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-code-fragment-index="0" data-code-line-numbers="1"><pre class="sourceCode numberSource py number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="" aria-label="1"></a>rows <span class="op">=</span> load(path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div>
+<p>Only step.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="0">
+<p>Then this.</p>
+</div>
+</section>
+<section id="no-stepper-left-alone" class="slide level2">
+<h2>No stepper: left alone</h2>
+<div class="fragment">
+<p>Untouched.</p>
+</div>
+<div class="fragment">
+<p>Also untouched.</p>
+
+</div>
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+manim.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

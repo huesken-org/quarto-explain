@@ -113,3 +113,66 @@ Two.
 Both.
 ::::
 :::
+
+## two steppers, the second in a fragment
+
+::: {.explain-code}
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {lines="1"}
+A one.
+::::
+
+:::: {lines="2"}
+A two.
+::::
+:::
+
+::: {.fragment}
+::: {.explain-code}
+```{.py}
+c = 3
+d = 4
+```
+
+:::: {lines="1"}
+B one.
+::::
+
+:::: {lines="2"}
+B two.
+::::
+:::
+:::
+
+## fragments and a pause around a stepper
+
+::: {.fragment}
+Before.
+:::
+
+. . .
+
+::: {.explain-code}
+```{.py}
+a = 1
+b = 2
+```
+
+:::: {.intro}
+Nothing highlighted yet.
+::::
+
+:::: {lines="1"}
+One.
+::::
+
+:::: {lines="2"}
+Two.
+::::
+:::
+
+After, [inline]{.fragment}.

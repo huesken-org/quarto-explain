@@ -246,6 +246,38 @@ The winner counts up and releases. Only now does the other continue.
 In the PDF each step names both sides by their `filename=`; without one, the
 configurable left/right wording is used.
 
+## Two constructs, one after the other
+
+A slide plays as one sequence. The second block sits in a `.fragment`: it
+appears once the first is through, and only then starts stepping.
+
+::: {.explain-code .below}
+```{.py}
+rows = load(path)
+```
+
+:::: {lines="1"}
+First the data.
+::::
+:::
+
+::: {.fragment}
+::: {.explain-code .below}
+```{.py}
+total = sum(r.value for r in rows)
+print(total)
+```
+
+:::: {lines="1"}
+Then the sum …
+::::
+
+:::: {lines="2"}
+… and its output.
+::::
+:::
+:::
+
 ## `.stepper` — the structure by hand
 
 `explain` produces this. A code block with `code-line-numbers="1|2|1-2"` becomes

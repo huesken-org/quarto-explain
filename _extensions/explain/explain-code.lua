@@ -253,7 +253,12 @@ local function explain_code(el)
 		code_block.attributes["mark-steps"] = table.concat(mark_parts, "|")
 	end
 
-	local step_control = pandoc.Div(control_entries, pandoc.Attr("", { "step-control" }))
+	-- `layout-valign` also aligns the explanation steps with each other: they
+	-- overlap in one stack as tall as the longest, where a short one would
+	-- otherwise float in the middle.
+	local step_control = pandoc.Div(control_entries, pandoc.Attr("", { "step-control" }, {
+		{ "gravity", el.attributes["layout-valign"] or "center" },
+	}))
 
 	-- `.below`: code on top at full slide width instead of the 50/50 columns —
 	-- for code too wide for half a slide. A plain div suffices; two block

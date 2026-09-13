@@ -125,6 +125,7 @@ Add up every row.
 | `lines="3-5,7"` | lines of the step, by number or [name](#line-names); without it the step highlights nothing |
 | `mark="text"` | mark part of a line (see `code-mark`) |
 | `layout="[0.5, 0.5]"` | column ratio (RevealJS) |
+| `layout-valign="top\|center\|bottom"` | vertical alignment of code and explanations, and of the explanation steps with each other (RevealJS, default `center`) |
 | `.below` | code on top at full width, explanations underneath |
 | `gravity="top\|center\|bottom"` | layer alignment with `.hide-code` |
 
@@ -227,6 +228,28 @@ Becomes reveal fragments or a button-driven stepper. A `.step` div is bound to a
 step index with `show-from`/`hide-from` and may sit at any depth. You rarely
 write this by hand — `explain` produces it.
 
+On a RevealJS slide everything that steps plays as **one** sequence, in document
+order: steppers (including the ones `explain` builds), `.r-stack-fragments`,
+`::: {.fragment}` divs, `[…]{.fragment}` spans and `. . .` pauses. Two constructs
+on one slide play one after the other, and a construct inside a `.fragment`
+starts stepping only once that fragment has appeared:
+
+````markdown
+::: {.explain-code}
+…
+:::
+
+::: {.fragment}
+::: {.explain-code}
+…
+:::
+:::
+````
+
+An explicit `fragment-index` is kept as written. Slides without a stepper or
+`.r-stack-fragments` are left alone. Not part of the sequence: incremental lists —
+reveal plays their items after everything else on the slide.
+
 ### `.r-stack-fragments`
 
 The same overlapping stack, on its own — for anything that should occupy one
@@ -249,7 +272,7 @@ block is wrapped in one. Outside revealjs the layers simply follow one another.
 
 | Attribute/class | Effect |
 |---|---|
-| `fragment-index="N"` | index of the first layer, to join a sequence already under way (default 0) |
+| `fragment-index="N"` | index of the first layer (default: the next one in the slide's sequence, see `stepper`) |
 | `gravity="top\|center\|bottom"` | which edge the layers align to (default `center`) |
 | `.no-transition` | instant switch instead of the cross-fade |
 

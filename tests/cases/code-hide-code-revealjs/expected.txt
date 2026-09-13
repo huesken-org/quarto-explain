@@ -22,7 +22,7 @@
 <span id="cb1-3"><a href="" aria-label="3"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="fragment fade-out" data-fragment-index="0">
+<div>
 <p>The loop.</p>
 </div>
 </div>

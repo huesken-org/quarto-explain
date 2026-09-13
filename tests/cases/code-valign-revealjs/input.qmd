@@ -1,0 +1,47 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: layout-valign aligns the steps too
+---
+
+## Top
+
+The caption stack gets `gravity-top`: the short step sits at the top edge of
+the box the long one spans, level with the code.
+
+::: {.explain-code layout-valign="top"}
+```{.go}
+row := b.freeRow(col)
+if row < 0 {
+	return ErrColumnFull
+}
+```
+
+:::: {lines="1"}
+Short.
+::::
+
+:::: {lines="2-4"}
+A long one.
+
+It has a second paragraph, so the stack is as tall as this.
+::::
+:::
+
+## Bottom, with `.below`
+
+::: {.explain-code .below layout-valign="bottom"}
+```{.go}
+row := b.freeRow(col)
+```
+
+:::: {lines="1"}
+Short.
+::::
+
+:::: {}
+A long one.
+
+It has a second paragraph.
+::::
+:::
