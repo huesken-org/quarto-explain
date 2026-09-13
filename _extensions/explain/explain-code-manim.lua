@@ -81,6 +81,7 @@ local function explain_code_manim(el)
 	for _, exp in ipairs(explanations) do
 		exp.lines = _explain.resolve_lines(exp.lines, names, code_block)
 	end
+	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 
 	-- The manim block is copied per step and restricted with `only-section`;
 	-- same content means the same hash, so manim still runs only once.
@@ -147,8 +148,15 @@ local function explain_code_manim(el)
 		end
 	end
 
-	manim_block.attributes["section-fragments"] = table.concat(sections, "|")
-	code_block.attributes["code-line-numbers"] = table.concat(lines, "|")
+	-- website with no step left (every one `.slides-only`, or only `.comment`s):
+	-- no `section-fragments`, so manim numbers the sections itself, one step
+	-- each, and stepper.lua gives the empty `.step-control` one entry per step.
+	-- No `code-line-numbers` either: an empty one would hide the code after the
+	-- first step.
+	if is_reveal or #steps > 0 then
+		manim_block.attributes["section-fragments"] = table.concat(sections, "|")
+		code_block.attributes["code-line-numbers"] = table.concat(lines, "|")
+	end
 
 	-- One mark per step, in the same `|` segmentation as code-line-numbers: the
 	-- block is cloned per step on both HTML targets, and code-mark.js takes the

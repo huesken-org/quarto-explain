@@ -1,0 +1,42 @@
+---
+format: html
+filters: [explain, stepper]
+title: slides-only on the website
+---
+
+## Output
+
+Intro, second step and first comment are gone; the numbering has no gap.
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+if row < 0 {
+	return ErrColumnFull
+}
+```
+
+:::: {.intro .slides-only}
+Only while presenting.
+::::
+
+:::: {lines="1"}
+Find a free row.
+::::
+
+:::: {lines="2-4" .slides-only}
+Ask the audience first.
+::::
+
+:::: {lines="2"}
+Check it.
+::::
+
+:::: {.comment .slides-only .go-output}
+Only on the slides, still `.go-output`.
+::::
+
+:::: {.comment}
+Everywhere.
+::::
+:::

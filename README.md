@@ -158,6 +158,18 @@ Two child divs, in all four constructs:
 `.comment` keeps its other classes and attributes. `.comment .hide-code` hides
 the code while the comment shows, leaving it the full width (slides only).
 
+### `.slides-only`
+
+On a step, a `.comment` or the `.intro`, in all four constructs: it appears on
+RevealJS only and is left out of the website and LaTeX output — for a remark
+that only makes sense while presenting. Line names in such a step are still
+checked on every target.
+
+If no step is left on the website, `.explain-parallel-code` shows its two
+blocks without a stepper. `.explain-manim` and `.explain-code-manim` keep theirs,
+with one empty step per section, so the animation can still be played through;
+the code stays whole instead of being split into steps.
+
 ### Line names
 
 Instead of counting lines, end them with a comment `<line=name>` and use the

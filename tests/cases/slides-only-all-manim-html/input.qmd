@@ -1,0 +1,30 @@
+---
+format: html
+filters: [explain, manim, stepper]
+title: every manim step slides-only on the website
+---
+
+## Output
+
+The stepper stays, one empty step per section, so the videos still play; the
+comment sits below it.
+
+::: {.explain-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("board")
+        self.next_section("window")
+```
+
+:::: {section="board" .slides-only}
+The board.
+::::
+
+:::: {.comment}
+Everywhere.
+::::
+:::

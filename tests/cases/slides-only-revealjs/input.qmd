@@ -1,0 +1,38 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: slides-only on the slides
+---
+
+## One move
+
+Everything is there; the class itself does not reach the HTML, the others do.
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col)
+if row < 0 {
+	return ErrColumnFull
+}
+```
+
+:::: {.intro .slides-only}
+Only while presenting.
+::::
+
+:::: {lines="1"}
+Find a free row.
+::::
+
+:::: {lines="2-4" .slides-only}
+Ask the audience first.
+::::
+
+:::: {.comment .slides-only .go-output}
+Only on the slides, still `.go-output`.
+::::
+
+:::: {.comment}
+Everywhere.
+::::
+:::

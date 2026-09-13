@@ -68,6 +68,7 @@ local function explain_manim(el)
 	if #explanations == 0 then
 		error("explain-manim: no explanation steps found")
 	end
+	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 
 	local steps, comments = _explain.partition(explanations)
 
@@ -120,7 +121,12 @@ local function explain_manim(el)
 
 	_explain.add_css()
 
-	manim_block.attributes["section-fragments"] = table.concat(sections, "|")
+	-- website with no step left (every one `.slides-only`, or only `.comment`s):
+	-- no `section-fragments`, so manim numbers the sections itself, one step
+	-- each, and stepper.lua gives the empty `.step-control` one entry per step.
+	if is_reveal or #steps > 0 then
+		manim_block.attributes["section-fragments"] = table.concat(sections, "|")
+	end
 
 	local anim_col = pandoc.Div(manim_block, pandoc.Attr("", { "explain-manim-animation" }))
 

@@ -1,0 +1,70 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">every code-manim step slides-only on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<p>The stepper stays, one empty step per section; the code is not split into steps and stays visible throughout. The intro sits above.</p>
+<div>
+<div class="intro">
+<p>Everywhere.</p>
+</div>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row">
+<div class="explain-code-manim-animation quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="r-stack manim-stack">
+<div class="step" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_borrow.mp4" type="video/mp4"></video>
+</div>
+<div class="step" data-show-from="1">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_drop.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="explain-code-manim-code quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">fn</span> main() <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> b <span class="op">=</span> <span class="pp">Board::</span>new()<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<div class="step-control">
+<div class="step-choice" data-step="0">
+
+</div>
+<div class="step-choice" data-step="1">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain.css
+manim.css
+stepper-video.js
+stepper.css
+stepper.js
+--- warnings

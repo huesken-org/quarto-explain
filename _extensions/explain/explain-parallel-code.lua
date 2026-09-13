@@ -78,6 +78,7 @@ local function explain_parallel_code(el)
 		exp.lines1 = _explain.resolve_lines(exp.lines1, names1, code1)
 		exp.lines2 = _explain.resolve_lines(exp.lines2, names2, code2)
 	end
+	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 	local steps, comments = _explain.partition(explanations)
 
 	-- latex: both listings with line numbers, the explanations as a list. Each
@@ -106,7 +107,10 @@ local function explain_parallel_code(el)
 			end
 			items:insert(_latex.labelled(exp.content, _latex.joined_ref(table.concat(refs, " · "))))
 		end
-		content:insert(pandoc.BulletList(items))
+		-- empty when every step is `.slides-only`; an empty itemize breaks LaTeX
+		if #items > 0 then
+			content:insert(pandoc.BulletList(items))
+		end
 		for _, exp in ipairs(comments) do
 			content:insert(_explain.comment_div(exp))
 		end
@@ -139,15 +143,23 @@ local function explain_parallel_code(el)
 		end
 	end
 
+	local function layout_of(blocks)
+		return pandoc.Div(blocks, pandoc.Attr("", {}, { { "layout", layout }, { "layout-valign", "top" } }))
+	end
+
+	-- website with no step left (every one `.slides-only`, or only `.comment`s):
+	-- a stepper without steps would be nothing but dead buttons, so the blocks
+	-- stand on their own.
+	if not is_reveal and #steps == 0 then
+		return _explain.website_wrap(layout_of({ code1, code2 }), intro_block, comments)
+	end
+
 	code1.attributes["code-line-numbers"] = table.concat(parts1, "|")
 	code2.attributes["code-line-numbers"] = table.concat(parts2, "|")
 
 	local step_control = pandoc.Div(control_entries, pandoc.Attr("", { "step-control" }))
 
-	local layout_div = pandoc.Div(
-		{ code1, code2 },
-		pandoc.Attr("", {}, { { "layout", layout }, { "layout-valign", "top" } })
-	)
+	local layout_div = layout_of({ code1, code2 })
 
 	local stepper_body = { layout_div, step_control }
 	if #hide_code > 0 then

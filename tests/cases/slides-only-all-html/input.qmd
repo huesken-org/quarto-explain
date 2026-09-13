@@ -1,0 +1,21 @@
+---
+format: html
+filters: [explain, stepper]
+title: every step slides-only on the website
+---
+
+## Output
+
+::: {.explain-parallel-code}
+```{.py filename="Worker 1"}
+lock.acquire()
+```
+
+```{.py filename="Worker 2"}
+lock.acquire()
+```
+
+:::: {lines1="1" lines2="1" .slides-only}
+Both want the lock.
+::::
+:::

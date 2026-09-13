@@ -251,6 +251,27 @@ function M.resolve_lines(spec, names, code_block)
 	return table.concat(parts, ",")
 end
 
+-- `.slides-only` on a step, a `.comment` or the `.intro`: it exists on RevealJS
+-- only and is dropped everywhere else. Called after the line names are resolved,
+-- so a wrong name in such a step still fails on every target.
+--
+-- Returns the explanations and the intro that remain for this target.
+function M.drop_slides_only(explanations, intro_block)
+	if quarto.doc.is_format("revealjs") then
+		return explanations, intro_block
+	end
+	local kept = {}
+	for _, exp in ipairs(explanations) do
+		if not (exp.attr and exp.attr.classes:includes("slides-only")) then
+			table.insert(kept, exp)
+		end
+	end
+	if intro_block and intro_block.classes:includes("slides-only") then
+		intro_block = nil
+	end
+	return kept, intro_block
+end
+
 -- Split explanation steps from `.comment`s, keeping the order within each.
 function M.partition(explanations)
 	local steps, comments = {}, {}
@@ -273,6 +294,7 @@ local CONTROL_ATTRS = {
 local CONTROL_CLASSES = {
 	comment = true,
 	["hide-code"] = true,
+	["slides-only"] = true,
 }
 
 -- `.hide-code` — only meaningful on RevealJS, see `hide_code_stack`.

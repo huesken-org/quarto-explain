@@ -336,6 +336,25 @@ end
 -- ----------------------------------------------------------------------------
 -- html (website) rendering: button-driven stepper.
 
+-- How many steps the `.step`s of a stepper reach: one past the highest
+-- show-from / hide-from. Read before `move_attrs` renames them.
+local function steps_spanned(el)
+	local n = 0
+	el:walk({
+		Div = function(d)
+			if d.classes:includes("step") then
+				for _, key in ipairs({ "show-from", "hide-from" }) do
+					local v = tonumber(d.attributes[key])
+					if v then
+						n = math.max(n, v + 1)
+					end
+				end
+			end
+		end,
+	})
+	return n
+end
+
 local function render_html(el)
 	quarto.doc.add_html_dependency({
 		name = "stepper",
@@ -343,6 +362,12 @@ local function render_html(el)
 		stylesheets = { "stepper.css" },
 		scripts = { "stepper-video.js", "stepper.js" },
 	})
+
+	-- stepper.js counts the steps by the `.step-choice`s. A `.step-control`
+	-- without entries — an `explain-manim` whose every step is `.slides-only` —
+	-- gets one empty entry per step its `.step`s reach, so the section videos
+	-- can still be stepped through.
+	local spanned = steps_spanned(el)
 
 	-- Walk the whole subtree so the code block / .step-control / .step elements
 	-- are found at any depth (they may be wrapped in a layout div).
@@ -353,7 +378,15 @@ local function render_html(el)
 		end,
 		Div = function(d)
 			if d.classes:includes("step-control") then
-				return build_control(d)
+				local control = build_control(d)
+				if #control.content == 0 then
+					for i = 1, spanned do
+						control.content:insert(pandoc.Div({}, pandoc.Attr("", { "step-choice" }, {
+							{ "data-step", tostring(i - 1) },
+						})))
+					end
+				end
+				return control
 			end
 			return move_attrs(d)
 		end,

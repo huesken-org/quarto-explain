@@ -1,0 +1,57 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">slides-only on the slides</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="one-move" class="slide level2">
+<h2>One move</h2>
+<p>Everything is there; the class itself does not reach the HTML, the others do.</p>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="|1|2-4||"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a><span class="cf">if</span> row <span class="op">&lt;</span> <span class="dv">0</span> <span class="op">{</span></span>
+<span id="cb1-3"><a href="" aria-label="3"></a>    <span class="cf">return</span> ErrColumnFull</span>
+<span id="cb1-4"><a href="" aria-label="4"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Only while presenting.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Find a free row.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<p>Ask the audience first.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="2">
+<div class="explain-comment go-output">
+<p>Only on the slides, still <code>.go-output</code>.</p>
+</div>
+</div>
+<div class="fragment current-visible" data-fragment-index="3">
+<div class="explain-comment">
+<p>Everywhere.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

@@ -1,0 +1,36 @@
+---
+format: html
+filters: [explain, manim, stepper]
+title: every code-manim step slides-only on the website
+---
+
+## Output
+
+The stepper stays, one empty step per section; the code is not split into
+steps and stays visible throughout. The intro sits above.
+
+::: {.explain-code-manim}
+```{.python .manim}
+from manim import *
+
+
+class DefaultTemplate(Scene):
+    def construct(self):
+        self.next_section("borrow")
+        self.next_section("drop")
+```
+
+```{.rust}
+fn main() {
+    let b = Board::new(); // <line=own>
+}
+```
+
+:::: {.intro}
+Everywhere.
+::::
+
+:::: {lines="own" section="borrow" .slides-only}
+Ownership moves into the function.
+::::
+:::

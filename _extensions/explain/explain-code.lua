@@ -133,7 +133,10 @@ local function render_latex(code_block, explanations, intro_block)
 	for _, exp in ipairs(steps) do
 		items:insert(_latex.labelled(exp.content, _latex.line_ref(exp.lines, _explain.labels)))
 	end
-	content:insert(pandoc.BulletList(items))
+	-- empty when every step is `.slides-only`; an empty itemize breaks LaTeX
+	if #items > 0 then
+		content:insert(pandoc.BulletList(items))
+	end
 
 	-- As on the website: `.comment`s after the list, not as a list item.
 	for _, exp in ipairs(comments) do
@@ -187,6 +190,7 @@ local function explain_code(el)
 	for _, exp in ipairs(explanations) do
 		exp.lines = _explain.resolve_lines(exp.lines, names, code_block)
 	end
+	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 
 	if quarto.doc.is_format("latex") then
 		return render_latex(code_block, explanations, intro_block)

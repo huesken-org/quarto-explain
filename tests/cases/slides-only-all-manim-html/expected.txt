@@ -1,0 +1,63 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">every manim step slides-only on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<p>The stepper stays, one empty step per section, so the videos still play; the comment sits below it.</p>
+<div>
+<div class="stepper">
+<div>
+<div class="explain-manim-animation">
+<div class="r-stack manim-stack">
+<div class="step" data-show-from="0">
+<video muted="" playsinline="" preload="auto" data-play-on="0" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0000_board.mp4" type="video/mp4"></video>
+</div>
+<div class="step" data-show-from="1">
+<video muted="" playsinline="" preload="auto" data-play-on="1" width="1344" height="700" style="width: 100%; height: auto;"><source src="manim_renders/HASH/media/videos/main/700p60/sections/DefaultTemplate_0001_window.mp4" type="video/mp4"></video>
+</div>
+</div>
+</div>
+<div class="step-control">
+<div class="step-choice" data-step="0">
+
+</div>
+<div class="step-choice" data-step="1">
+
+</div>
+</div>
+</div>
+</div>
+<div class="explain-comment">
+<p>Everywhere.</p>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain.css
+manim.css
+stepper-video.js
+stepper.css
+stepper.js
+--- warnings
