@@ -42,4 +42,10 @@ metadata
   Expected a comment at the end of the line: `// <line=name>`
   (language: go). Otherwise it would stay in the displayed code.
 
-WARN: Error encountered when rendering files
+ERROR: === explain: line 1: `<line=…>` not recognised ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col) # <line=find>
+
+  Expected a comment at the end of the line: `// <line=name>`
+  (language: go). Otherwise it would stay in the displayed code.
+ERROR: Pandoc conversion failed (exit code 1)

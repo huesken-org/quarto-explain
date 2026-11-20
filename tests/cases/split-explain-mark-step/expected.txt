@@ -1,0 +1,49 @@
+--- exit 1
+--- content 
+--- assets
+--- warnings
+pandoc 
+  to: revealjs
+  output-file: input.html
+  standalone: true
+  wrap: none
+  default-image-extension: png
+  html-math-method:
+    method: mathjax
+    url: >-
+      https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML-full
+  slide-level: 2
+  
+metadata
+  link-citations: true
+  width: 1050
+  height: 700
+  margin: 0.1
+  center: false
+  navigationMode: linear
+  controlsLayout: edges
+  controlsTutorial: false
+  hash: true
+  history: true
+  hashOneBasedIndex: false
+  fragmentInURL: false
+  transition: none
+  backgroundTransition: none
+  pdfSeparateFragments: false
+  lang: en
+  auto-stretch: true
+  title: mark on a step in a split block
+  
+
+=== explain: `mark=` on a step is not supported in a block with `<split>` ===
+  File       : TMP/input.qmd
+  Code block : a := 1
+
+  Mark on the code block instead (`mark="N:text"`), or drop the marker.
+
+ERROR: === explain: `mark=` on a step is not supported in a block with `<split>` ===
+  File       : TMP/input.qmd
+  Code block : a := 1
+
+  Mark on the code block instead (`mark="N:text"`), or drop the marker.
+ERROR: Pandoc conversion failed (exit code 1)

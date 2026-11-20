@@ -1,0 +1,19 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: mark on a step in a split block
+---
+
+## Config
+
+::: {.explain-code}
+```{.go}
+a := 1
+// <split>
+b := 2
+```
+
+:::: {lines="1" mark="a"}
+Not supported.
+::::
+:::

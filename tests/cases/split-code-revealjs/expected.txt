@@ -1,0 +1,43 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">split a plain block</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="counter" class="slide level2">
+<h2>Counter</h2>
+<div class="split-code quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>counter.go</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="counter.go" data-startfrom="10" data-mark="3:n  int"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 9;"><span id="cb1-10"><a href="" aria-label="10"></a><span class="kw">type</span> Counter <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="" aria-label="11"></a>    mu sync<span class="op">.</span>Mutex</span>
+<span id="cb1-12"><a href="" aria-label="12"></a>    n  <span class="dt">int</span></span>
+<span id="cb1-13"><a href="" aria-label="13"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>counter.go</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="counter.go" data-startfrom="14" data-mark="Println"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 13;"><span id="cb2-14"><a href="" aria-label="14"></a><span class="kw">func</span> Report<span class="op">(</span>c <span class="op">*</span>Counter<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-15"><a href="" aria-label="15"></a>    fmt<span class="op">.</span>Println<span class="op">(</span>c<span class="op">.</span>n<span class="op">)</span></span>
+<span id="cb2-16"><a href="" aria-label="16"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+--- warnings

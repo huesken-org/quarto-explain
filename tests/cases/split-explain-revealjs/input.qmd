@@ -1,0 +1,40 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: split an explained block
+---
+
+## Config
+
+::: {.explain-code}
+```{.go filename="config.go" startFrom="13"}
+func Load() error {
+    data := read()   // <line=read>
+    parse(data)
+    return nil
+}
+// <split>
+func Save() error {
+    write()
+    return nil
+}
+```
+
+:::: {.intro}
+Nothing found by vet.
+::::
+
+:::: {lines="read"}
+Left only.
+::::
+
+:::: {lines="7"}
+Right only.
+::::
+
+:::: {lines="4-7"}
+Across the split.
+::::
+
+Bare step without lines.
+:::

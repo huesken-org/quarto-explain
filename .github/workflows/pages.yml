@@ -27,7 +27,7 @@ jobs:
       # Same pin as the test workflow, plus TeX for the PDF outputs.
       - uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: 1.10.18
+          version: 1.11.9
           tinytex: true
 
       # manim really runs here. cairo and pango are needed to build pycairo,

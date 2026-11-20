@@ -46,4 +46,14 @@ metadata
   Without this check the slide would simply come out unmarked, and you would
   find out while presenting.
 
-WARN: Error encountered when rendering files
+ERROR: === code-mark: text not found: freeColumn ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col)
+  mark       : freeColumn
+
+  The search is literal, not a pattern. A typo, or did the code change?
+  A `;` that belongs to the search text is written `\\;` in the .qmd — two backslashes,
+  pandoc eats one while reading the attribute. A `|` needs nothing.
+  Without this check the slide would simply come out unmarked, and you would
+  find out while presenting.
+ERROR: Pandoc conversion failed (exit code 1)

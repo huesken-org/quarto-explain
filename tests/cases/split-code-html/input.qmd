@@ -1,0 +1,18 @@
+---
+format: html
+filters: [explain, stepper]
+title: split a plain block on the website
+---
+
+## Counter
+
+```{.go filename="counter.go" startFrom="10" mark="3:n  int;Println"}
+type Counter struct {
+    mu sync.Mutex
+    n  int
+}
+// <split>
+func Report(c *Counter) {
+    fmt.Println(c.n)
+}
+```

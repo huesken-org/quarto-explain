@@ -24,3 +24,7 @@ contributes:
       at: pre-ast
     - path: explain-manim.lua
       at: pre-ast
+    # Last: `.explain-code` handles its own `<split>` marker; this one splits
+    # the plain code blocks that are left.
+    - path: split-code.lua
+      at: pre-ast

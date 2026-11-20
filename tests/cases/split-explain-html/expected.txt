@@ -1,0 +1,68 @@
+--- exit 0
+--- content input.html
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">split an explained block on the website</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="config" class="level2">
+<h2 class="anchored" data-anchor-id="config">Config</h2>
+<div>
+<div class="intro">
+<p>Nothing found by vet.</p>
+</div>
+<div class="explain-annotated">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>config.go</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="config.go" data-startfrom="13"><pre class="sourceCode go code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> Load<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    data <span class="op">:=</span> read<span class="op">()</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    parse<span class="op">(</span>data<span class="op">)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ot">nil</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">func</span> Save<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    write<span class="op">()</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ot">nil</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="explain-annotations">
+<div class="explain-annotation" data-lines="2" data-index="1">
+<p>Left only.</p>
+</div>
+<div class="explain-annotation" data-lines="7" data-index="2">
+<p>Right only.</p>
+</div>
+<div class="explain-annotation" data-lines="4-7" data-index="3">
+<p>Across the split.</p>
+</div>
+<div class="explain-annotation no-marker">
+<p>Bare step without lines.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+--- assets
+explain-code.css
+explain-code.js
+explain.css
+--- warnings

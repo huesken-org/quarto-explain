@@ -43,4 +43,11 @@ metadata
   A name is defined by a comment `<line=fnd>` at the end of a line of this block.
   Names in this block: find, place
 
-WARN: Error encountered when rendering files
+ERROR: === explain: unknown line name: fnd ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col)
+  lines      : fnd
+
+  A name is defined by a comment `<line=fnd>` at the end of a line of this block.
+  Names in this block: find, place
+ERROR: Pandoc conversion failed (exit code 1)

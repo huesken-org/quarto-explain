@@ -205,6 +205,46 @@ The render aborts on a name `lines=` uses but no line defines, and on a
 `<line=…>` whose comment syntax does not fit the language — it would otherwise
 stay in the displayed code.
 
+### Splitting a block (`<split>`)
+
+A file too long for one column but too narrow for the full slide width: a line
+holding nothing but the comment `<split>` cuts the block into two columns on
+the slides, while the website and LaTeX keep one long block.
+
+````markdown
+```{.go filename="counter.go" startFrom="10"}
+type Counter struct {
+    n int
+}
+// <split>
+func Report(c *Counter) {
+    fmt.Println(c.n)
+}
+```
+````
+
+| Output | Result |
+|---|---|
+| RevealJS | two blocks side by side; the right one continues the numbering (`startFrom="14"`), both keep `filename` |
+| Website / LaTeX | one block, the marker line removed |
+
+The marker line does not count: line numbers, `lines=` and `mark=` refer to the
+block without it. The comment syntax follows the language, as for line names.
+
+- **Plain code block**: `split-layout="[0.6, 0.4]"` sets the column ratio
+  (default `[0.5, 0.5]`). A block-level `mark=` is divided between the halves
+  (`N:text` by line, bare text to every half containing it).
+- **Inside `.explain-code`**: on the slides the block becomes an
+  `.explain-parallel-code`; each step's `lines=` (counted over the whole block)
+  is divided into `lines1=`/`lines2=`, a range across the marker highlights in
+  both columns. `split-layout=` on the `.explain-code` div sets the ratio there.
+  On the website the block keeps its numbered annotations. `mark=` on a step is
+  not supported yet (the render aborts); mark on the code block instead.
+
+The render aborts on a second marker, on one that leaves a column empty, on a
+marker in an executed `.run` block (a runner later in the chain would execute
+two fragments) and on one in `.explain-parallel-code` or the manim constructs.
+
 ## `stepper`
 
 ````markdown

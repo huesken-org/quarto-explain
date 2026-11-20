@@ -406,4 +406,178 @@ function M.hide_code_stack(layout_div, hide_code, control_entries, gravity)
 	return pandoc.Div(layers, pandoc.Attr("", classes))
 end
 
+-- Split marker: a line holding nothing but the comment `<split>` cuts a code
+-- block into two columns on the slides, while the website and LaTeX keep one
+-- long block — for a file too long for one column but too narrow to need the
+-- full width:
+--
+--     ```{.go filename="counter.go" startFrom="10"}
+--     func Inc() { … }
+--     // <split>
+--     func Report() { … }
+--     ```
+--
+-- The comment syntax follows the language, as for `<line=…>`. The marker line
+-- is removed everywhere and does not count: line numbers, `lines=` and `mark=`
+-- refer to the block without it, and the right column continues the numbering
+-- of the left (its `startFrom` is computed).
+
+-- Removes the marker line from `code_block.text` (in place) and returns the
+-- number of lines above it, or nil when there is no marker. Aborts on a second
+-- marker or one that would leave a column empty.
+function M.take_split(code_block)
+	local lang = language_of(code_block)
+	local syntaxes = (lang and COMMENT_SYNTAX[lang]) or ALL_SYNTAX
+
+	local out = {}
+	local at = nil
+	local n = 0
+	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
+		n = n + 1
+		local is_marker = false
+		for _, syntax in ipairs(syntaxes) do
+			local pattern = "^%s*" .. pattern_escape(syntax[1]) .. "%s*<split>%s*"
+				.. pattern_escape(syntax[2]) .. "%s*$"
+			if line:match(pattern) then
+				is_marker = true
+				break
+			end
+		end
+		if is_marker then
+			if at then
+				fail_lines(code_block, "line " .. n .. ": second `<split>`", nil,
+					"A block splits into two columns at most; remove one of the markers.")
+			end
+			at = #out
+		else
+			table.insert(out, line)
+		end
+	end
+	if not at then
+		return nil
+	end
+	if at == 0 or at == #out then
+		fail_lines(code_block, "`<split>` leaves a column empty", nil,
+			"Put the marker between two lines of code, not at the start or the end of the block.")
+	end
+	code_block.text = table.concat(out, "\n")
+	return at
+end
+
+-- Aborts the render about a `<split>` block.
+function M.fail_split(code_block, reason, hint)
+	fail_lines(code_block, reason, nil, hint)
+end
+
+-- `startFrom` as pandoc reads it (both spellings), 1 when absent.
+local function start_from(code_block)
+	local value = code_block.attributes["startFrom"] or code_block.attributes["start-from"]
+	return tonumber(value) or 1
+end
+
+-- Splits `;`-separated mark entries, keeping an escaped `\;` (see code-mark.lua).
+local function split_marks(spec)
+	local out, buf = {}, ""
+	local i = 1
+	while i <= #spec do
+		local c = spec:sub(i, i)
+		if c == "\\" and spec:sub(i + 1, i + 1) == ";" then
+			buf = buf .. "\\;"
+			i = i + 2
+		elseif c == ";" then
+			table.insert(out, buf)
+			buf = ""
+			i = i + 1
+		else
+			buf = buf .. c
+			i = i + 1
+		end
+	end
+	table.insert(out, buf)
+	return out
+end
+
+-- The block-level `mark=` divided between the two halves: `N:text` goes to the
+-- half holding line N (renumbered), a bare `text` to every half containing it —
+-- code-mark insists that a mark finds its text. Text found in neither half stays
+-- on the left, so code-mark reports it.
+local function split_mark_attr(spec, n, left_text, right_text)
+	local left, right = {}, {}
+	for _, entry in ipairs(split_marks(spec)) do
+		local line, text = entry:match("^%s*(%d+):(.*)$")
+		if line then
+			line = tonumber(line)
+			if line <= n then
+				table.insert(left, entry)
+			else
+				table.insert(right, (line - n) .. ":" .. text)
+			end
+		elseif entry ~= "" then
+			local plain = entry:gsub("\\;", ";")
+			local in_left = left_text:find(plain, 1, true) ~= nil
+			local in_right = right_text:find(plain, 1, true) ~= nil
+			if in_left or not in_right then
+				table.insert(left, entry)
+			end
+			if in_right then
+				table.insert(right, entry)
+			end
+		end
+	end
+	return table.concat(left, ";"), table.concat(right, ";")
+end
+
+-- The two halves of a block whose marker `take_split` has removed: the first
+-- `n` lines and the rest. Both keep classes and attributes (`filename` on both,
+-- so the columns line up); the right one gets the continued `startFrom` and
+-- loses the id.
+function M.split_at(code_block, n)
+	local lines = {}
+	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
+		table.insert(lines, line)
+	end
+	local left = code_block:clone()
+	local right = code_block:clone()
+	left.text = table.concat(lines, "\n", 1, n)
+	right.text = table.concat(lines, "\n", n + 1, #lines)
+	right.identifier = ""
+	right.attributes["start-from"] = nil
+	right.attributes["startFrom"] = tostring(start_from(code_block) + n)
+
+	local mark = code_block.attributes["mark"]
+	if mark and mark ~= "" then
+		local l, r = split_mark_attr(mark, n, left.text, right.text)
+		left.attributes["mark"] = l ~= "" and l or nil
+		right.attributes["mark"] = r ~= "" and r or nil
+	end
+	return left, right
+end
+
+-- A resolved `lines=` spec ("2-4,7") divided at line `n`: the part for the left
+-- half and the part for the right one, renumbered; nil for a side it misses.
+function M.split_lines(spec, n)
+	if not spec or spec == "" then
+		return nil, nil
+	end
+	local left, right = {}, {}
+	local function range(a, b)
+		return a == b and tostring(a) or (a .. "-" .. b)
+	end
+	for part in spec:gmatch("[^,]+") do
+		local a, b = part:match("^%s*(%d+)%s*%-%s*(%d+)%s*$")
+		if not a then
+			a = part:match("^%s*(%d+)%s*$")
+			b = a
+		end
+		a, b = tonumber(a), tonumber(b)
+		if a <= n then
+			table.insert(left, range(a, math.min(b, n)))
+		end
+		if b > n then
+			table.insert(right, range(math.max(a, n + 1) - n, b - n))
+		end
+	end
+	return (#left > 0) and table.concat(left, ",") or nil, (#right > 0) and table.concat(right, ",") or nil
+end
+
 return M

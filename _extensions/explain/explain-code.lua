@@ -146,6 +146,35 @@ local function render_latex(code_block, explanations, intro_block)
 	return pandoc.Div(content, pandoc.Attr("", { "explain-print" }))
 end
 
+-- revealjs with a `<split>` marker: the block as an `.explain-parallel-code`,
+-- left and right half side by side, each `lines=` divided into `lines1=` and
+-- `lines2=`. explain-parallel-code.lua runs after this filter and renders it,
+-- so both constructs look the same on the slides. On the website and in LaTeX
+-- the block stays whole (the marker is already gone).
+local function split_into_parallel(el, code_block, n, explanations, intro_block)
+	local left, right = _explain.split_at(code_block, n)
+	local content = pandoc.List({ left, right })
+	if intro_block then
+		content:insert(intro_block)
+	end
+	for _, exp in ipairs(explanations) do
+		local attr = exp.attr and exp.attr:clone() or pandoc.Attr()
+		attr.attributes["lines"] = nil
+		local l1, l2 = _explain.split_lines(exp.lines, n)
+		attr.attributes["lines1"] = l1
+		attr.attributes["lines2"] = l2
+		content:insert(pandoc.Div(exp.content, attr))
+	end
+	local attrs = {}
+	if el.attributes["gravity"] then
+		attrs.gravity = el.attributes["gravity"]
+	end
+	if el.attributes["split-layout"] then
+		attrs.layout = el.attributes["split-layout"]
+	end
+	return pandoc.Div(content, pandoc.Attr(el.identifier, { "explain-parallel-code" }, attrs))
+end
+
 local function explain_code(el)
 	if not el.classes:includes("explain-code") then
 		return nil
@@ -185,12 +214,30 @@ local function explain_code(el)
 		return nil
 	end
 
+	-- The `<split>` marker goes first: it does not count as a line, so nothing
+	-- may count lines before it is gone.
+	local split = _explain.take_split(code_block)
+
 	-- `<line=name>` comments out of the code, names in `lines=` into numbers.
 	local names = _explain.take_line_names(code_block)
 	for _, exp in ipairs(explanations) do
 		exp.lines = _explain.resolve_lines(exp.lines, names, code_block)
 	end
 	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
+
+	if split then
+		-- Checked on every target, so a slide that fails does not surprise later.
+		for _, exp in ipairs(explanations) do
+			if exp.mark and exp.mark ~= "" then
+				_explain.fail_split(code_block,
+					"`mark=` on a step is not supported in a block with `<split>`",
+					"Mark on the code block instead (`mark=\"N:text\"`), or drop the marker.")
+			end
+		end
+		if is_reveal then
+			return split_into_parallel(el, code_block, split, explanations, intro_block)
+		end
+	end
 
 	if quarto.doc.is_format("latex") then
 		return render_latex(code_block, explanations, intro_block)

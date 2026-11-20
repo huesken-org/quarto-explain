@@ -42,4 +42,10 @@ metadata
 
   Line numbers count the **displayed** code, like `lines=` in `.explain-code`.
 
-WARN: Error encountered when rendering files
+ERROR: === code-mark: no line 5 (the block has 1) ===
+  File       : TMP/input.qmd
+  Code block : row := b.freeRow(col)
+  mark       : 5:row
+
+  Line numbers count the **displayed** code, like `lines=` in `.explain-code`.
+ERROR: Pandoc conversion failed (exit code 1)
