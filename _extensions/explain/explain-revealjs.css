@@ -4,3 +4,11 @@
 .reveal .stepper .explain-below > .r-stack {
   margin-top: 0.5em;
 }
+
+/* A `<split>` block in `.explain-code`: a step that highlights only one half
+   gives the other half the segment `0`. That matches no line, so the
+   line-highlight plugin leaves the block undimmed — dim all of it here, the
+   way the plugin dims the lines it does not highlight. */
+.reveal div.sourceCode pre code[data-code-line-numbers="0"] > span {
+  opacity: 0.4;
+}

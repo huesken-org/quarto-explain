@@ -161,6 +161,14 @@ local function split_into_parallel(el, code_block, n, explanations, intro_block)
 		local attr = exp.attr and exp.attr:clone() or pandoc.Attr()
 		attr.attributes["lines"] = nil
 		local l1, l2 = _explain.split_lines(exp.lines, n)
+		-- One file, so a step that highlights one half dims the other one
+		-- entirely. An empty segment would leave that half bright (in a true
+		-- parallel block it means "nothing happens here"); line 0 matches no
+		-- line and explain-revealjs.css dims a block whose segment it is.
+		if l1 or l2 then
+			l1 = l1 or "0"
+			l2 = l2 or "0"
+		end
 		attr.attributes["lines1"] = l1
 		attr.attributes["lines2"] = l2
 		content:insert(pandoc.Div(exp.content, attr))

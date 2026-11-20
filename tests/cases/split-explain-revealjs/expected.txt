@@ -19,7 +19,7 @@
 <div class="code-with-filename-file">
 <pre><strong>config.go</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="config.go" data-startfrom="13" data-code-fragment-index="0" data-code-line-numbers="|2||4-5|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="" aria-label="13"></a><span class="kw">func</span> Load<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="config.go" data-startfrom="13" data-code-fragment-index="0" data-code-line-numbers="|2|0|4-5|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="" aria-label="13"></a><span class="kw">func</span> Load<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
 <span id="cb1-14"><a href="" aria-label="14"></a>    data <span class="op">:=</span> read<span class="op">()</span></span>
 <span id="cb1-15"><a href="" aria-label="15"></a>    parse<span class="op">(</span>data<span class="op">)</span></span>
 <span id="cb1-16"><a href="" aria-label="16"></a>    <span class="cf">return</span> <span class="ot">nil</span></span>
@@ -31,7 +31,7 @@
 <div class="code-with-filename-file">
 <pre><strong>config.go</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="config.go" data-startfrom="18" data-code-fragment-index="0" data-code-line-numbers="||2|1-2|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 17;"><span id="cb2-18"><a href="" aria-label="18"></a><span class="kw">func</span> Save<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="config.go" data-startfrom="18" data-code-fragment-index="0" data-code-line-numbers="|0|2|1-2|"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 17;"><span id="cb2-18"><a href="" aria-label="18"></a><span class="kw">func</span> Save<span class="op">()</span> <span class="dt">error</span> <span class="op">{</span></span>
 <span id="cb2-19"><a href="" aria-label="19"></a>    write<span class="op">()</span></span>
 <span id="cb2-20"><a href="" aria-label="20"></a>    <span class="cf">return</span> <span class="ot">nil</span></span>
 <span id="cb2-21"><a href="" aria-label="21"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
