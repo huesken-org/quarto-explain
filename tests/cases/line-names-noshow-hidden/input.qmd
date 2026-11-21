@@ -1,0 +1,20 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a name inside a noshow block points at nothing
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+// <noshow>
+package main // <line=pkg>
+// </noshow>
+row := b.freeRow(col)
+```
+
+:::: {lines="pkg"}
+The package.
+::::
+:::

@@ -1,0 +1,51 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">names count the displayed lines, past go-cell’s hidden ones</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section class="slide level2">
+
+<!-- go-cell (not in this chain) later drops the `<noshow>` block and the
+`exit:` marker, so `find` is displayed line 1, `place` line 3. -->
+</section>
+<section id="one-move" class="slide level2">
+<h2>One move</h2>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-center">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-mark-steps="1:row|3:col" data-code-fragment-index="0" data-code-line-numbers="1|3"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a><span class="co">// &lt;noshow&gt;</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a><span class="kw">package</span> main</span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="co">// &lt;/noshow&gt;</span></span>
+<span id="cb1-4"><a href="" aria-label="4"></a>row <span class="op">:=</span> b<span class="op">.</span>freeRow<span class="op">(</span>col<span class="op">)</span></span>
+<span id="cb1-5"><a href="" aria-label="5"></a><span class="co">// exit: early</span></span>
+<span id="cb1-6"><a href="" aria-label="6"></a>check<span class="op">(</span>row<span class="op">)</span></span>
+<span id="cb1-7"><a href="" aria-label="7"></a>b<span class="op">.</span>cells<span class="op">[</span>row<span class="op">][</span>col<span class="op">]</span> <span class="op">=</span> p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="r-stack quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Find a free row.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Put the piece in place.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

@@ -1,0 +1,30 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: names count the displayed lines, past go-cell's hidden ones
+---
+
+<!-- go-cell (not in this chain) later drops the `<noshow>` block and the
+`exit:` marker, so `find` is displayed line 1, `place` line 3. -->
+
+## One move
+
+::: {.explain-code}
+```{.go}
+// <noshow>
+package main
+// </noshow>
+row := b.freeRow(col) // <line=find>
+// exit: early
+check(row)
+b.cells[row][col] = p // <line=place>
+```
+
+:::: {lines="find" mark="find:row"}
+Find a free row.
+::::
+
+:::: {lines="place" mark="place:col"}
+Put the piece in place.
+::::
+:::

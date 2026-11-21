@@ -169,6 +169,51 @@ local function language_of(code_block)
 	return code_block.classes[1] and code_block.classes[1]:lower() or nil
 end
 
+-- Lines that stay in the source but never reach the slide: in a `.go` block,
+-- go-cell (later in the chain) cuts out `// <noshow>` … `// </noshow>`, the
+-- markers included, and every `// exit: <name>` line — the same patterns as
+-- its `split_noshow`. Line numbers in `lines=`/`mark=` count the displayed
+-- code, so a name must skip these too.
+--
+-- Returns a set of the hidden line numbers (1-based, in the source).
+local function hidden_lines(code_block)
+	local hidden = {}
+	if not code_block.classes:includes("go") then
+		return hidden
+	end
+	local in_noshow = false
+	local n = 0
+	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
+		n = n + 1
+		if not in_noshow and line:match("^%s*//%s*<noshow>%s*$") then
+			in_noshow = true
+			hidden[n] = true
+		elseif in_noshow then
+			if line:match("^%s*//%s*</noshow>%s*$") then
+				in_noshow = false
+			end
+			hidden[n] = true
+		elseif line:match("^%s*//%s*exit:%s*%S+%s*$") then
+			hidden[n] = true
+		end
+	end
+	return hidden
+end
+
+-- The displayed lines of `code_block`, without the hidden ones.
+local function displayed_lines(code_block)
+	local hidden = hidden_lines(code_block)
+	local lines = {}
+	local n = 0
+	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
+		n = n + 1
+		if not hidden[n] then
+			table.insert(lines, line)
+		end
+	end
+	return lines
+end
+
 -- Removes the `<line=name>` comments from `code_block.text` (in place) and
 -- returns the names: name -> ascending list of line numbers. Aborts on a
 -- `<line=…>` that stays behind because its comment syntax does not fit the
@@ -177,20 +222,30 @@ function M.take_line_names(code_block)
 	local lang = language_of(code_block)
 	local syntaxes = (lang and COMMENT_SYNTAX[lang]) or ALL_SYNTAX
 
+	local hidden = hidden_lines(code_block)
 	local names = {}
 	local out = {}
-	local n = 0
+	local n = 0 -- source line
+	local shown = 0 -- displayed line, what `lines=` counts
 	local text = code_block.text
 	for line in (text .. "\n"):gmatch("([^\n]*)\n") do
 		n = n + 1
+		if not hidden[n] then
+			shown = shown + 1
+		end
 		for _, syntax in ipairs(syntaxes) do
 			local pattern = "^(.-)%s*" .. pattern_escape(syntax[1]) .. "%s*<line=(" .. NAME .. ")>%s*"
 				.. pattern_escape(syntax[2]) .. "%s*$"
 			local code, name = line:match(pattern)
 			if code then
+				if hidden[n] then
+					fail_lines(code_block, "line " .. n .. ": `<line=" .. name .. ">` on a hidden line", nil,
+						"The line is inside `// <noshow>` … `// </noshow>` and never shown, so nothing\n"
+						.. "  can be highlighted or marked there. Name a visible line instead.")
+				end
 				line = code
 				names[name] = names[name] or {}
-				table.insert(names[name], n)
+				table.insert(names[name], shown)
 				break
 			end
 		end
@@ -304,10 +359,7 @@ function M.resolve_marks(spec, names, code_block)
 	if not spec or spec == "" or next(names) == nil then
 		return spec
 	end
-	local lines = {}
-	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
-		table.insert(lines, line)
-	end
+	local lines = displayed_lines(code_block)
 	local out = {}
 	for _, entry in ipairs(split_marks(spec)) do
 		local name, text = entry:match("^%s*(" .. NAME .. "):(.*)$")

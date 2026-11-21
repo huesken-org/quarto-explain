@@ -201,6 +201,10 @@ none does. This works for a step's `mark=` and for the code block's own. A
 prefix that is no name of the block stays part of the search text, so
 `mark="std::cout"` still searches for `std::cout`.
 
+Names count the *displayed* lines: in a `.go` block the lines go-cell hides
+(`// <noshow>` … `// </noshow>` and `// exit: <name>`) are skipped, and a
+`<line=…>` inside a `<noshow>` block aborts the render.
+
 The comment syntax follows the block's language (its first class): `//` for Go,
 Rust, C, Java, JavaScript …, `#` for Python, R, shell, YAML …, `--` for Lua, SQL,
 Haskell, `%` for LaTeX and Matlab, `;` for Lisps, `/* */` for CSS and `<!-- -->`
