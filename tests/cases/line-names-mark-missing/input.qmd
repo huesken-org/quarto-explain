@@ -1,0 +1,18 @@
+---
+format: revealjs
+filters: [explain, stepper, code-mark]
+title: a mark text missing from its named lines must not stay silent
+---
+
+## One move
+
+::: {.explain-code}
+```{.go}
+row := b.freeRow(col) // <line=find>
+b.cells[row][col] = p // <line=place>
+```
+
+:::: {lines="find" mark="find:cells"}
+Find a free row.
+::::
+:::

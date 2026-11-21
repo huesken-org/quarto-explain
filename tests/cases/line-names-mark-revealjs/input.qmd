@@ -1,0 +1,29 @@
+---
+format: revealjs
+filters: [explain, stepper, code-mark]
+title: mark by line name on the slides
+---
+
+## One move
+
+::: {.explain-code}
+```{.go mark="place:p"}
+row := b.freeRow(col) // <line=find>
+if row < 0 {          // <line=full>
+    return ErrColumnFull
+}                     // <line=full>
+b.cells[row][col] = p // <line=place>
+```
+
+:::: {lines="find" mark="find:row"}
+Find a free row.
+::::
+
+:::: {lines="full" mark="full:row"}
+Only the `if` has a `row` — the closing brace is skipped.
+::::
+
+:::: {lines="place" mark="place:col"}
+Put the piece in place.
+::::
+:::

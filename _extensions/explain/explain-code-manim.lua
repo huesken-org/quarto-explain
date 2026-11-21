@@ -76,11 +76,14 @@ local function explain_code_manim(el)
 		error("explain-code-manim: no explanation steps found")
 	end
 
-	-- `<line=name>` comments out of the code, names in `lines=` into numbers.
+	-- `<line=name>` comments out of the code, names in `lines=` and `mark=`
+	-- into numbers.
 	local names = _explain.take_line_names(code_block)
 	for _, exp in ipairs(explanations) do
 		exp.lines = _explain.resolve_lines(exp.lines, names, code_block)
+		exp.mark = _explain.resolve_marks(exp.mark, names, code_block)
 	end
+	code_block.attributes["mark"] = _explain.resolve_marks(code_block.attributes["mark"], names, code_block)
 	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 
 	-- The manim block is copied per step and restricted with `only-section`;

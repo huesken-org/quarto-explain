@@ -195,6 +195,12 @@ Report a full column.
 The comments are removed from the output, so the reader sees neither them nor
 the whitespace in front of them, and `mark=` searches the code without them.
 
+`mark=` takes a name where it takes a line number: `mark="full:row"` marks
+`row` in the lines named `full` — those that contain it; the render aborts if
+none does. This works for a step's `mark=` and for the code block's own. A
+prefix that is no name of the block stays part of the search text, so
+`mark="std::cout"` still searches for `std::cout`.
+
 The comment syntax follows the block's language (its first class): `//` for Go,
 Rust, C, Java, JavaScript …, `#` for Python, R, shell, YAML …, `--` for Lua, SQL,
 Haskell, `%` for LaTeX and Matlab, `;` for Lisps, `/* */` for CSS and `<!-- -->`
@@ -346,6 +352,7 @@ total += row.amount
 |---|---|
 | `mark="text"` | every occurrence in the block |
 | `mark="5:text"` | only in line 5 of the **displayed** code |
+| `mark="name:text"` | only in the lines [named](#line-names) `name` (`explain` constructs) |
 | `mark="1:one;5:other"` | several specs, separated by `;` |
 | `mark="a\\; b"` | a `;` in the search text — **two** backslashes, pandoc eats one |
 

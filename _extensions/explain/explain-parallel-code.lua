@@ -78,6 +78,8 @@ local function explain_parallel_code(el)
 		exp.lines1 = _explain.resolve_lines(exp.lines1, names1, code1)
 		exp.lines2 = _explain.resolve_lines(exp.lines2, names2, code2)
 	end
+	code1.attributes["mark"] = _explain.resolve_marks(code1.attributes["mark"], names1, code1)
+	code2.attributes["mark"] = _explain.resolve_marks(code2.attributes["mark"], names2, code2)
 	explanations, intro_block = _explain.drop_slides_only(explanations, intro_block)
 	local steps, comments = _explain.partition(explanations)
 

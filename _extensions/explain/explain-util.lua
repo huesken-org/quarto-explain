@@ -272,6 +272,66 @@ function M.drop_slides_only(explanations, intro_block)
 	return kept, intro_block
 end
 
+-- Splits `;`-separated mark entries, keeping an escaped `\;` (see code-mark.lua).
+local function split_marks(spec)
+	local out, buf = {}, ""
+	local i = 1
+	while i <= #spec do
+		local c = spec:sub(i, i)
+		if c == "\\" and spec:sub(i + 1, i + 1) == ";" then
+			buf = buf .. "\\;"
+			i = i + 2
+		elseif c == ";" then
+			table.insert(out, buf)
+			buf = ""
+			i = i + 1
+		else
+			buf = buf .. c
+			i = i + 1
+		end
+	end
+	table.insert(out, buf)
+	return out
+end
+
+-- Replaces line names in a `mark=` spec by line numbers: "find:row" ->
+-- "1:row", one entry per line of the name that contains the text. A name may
+-- stand for several lines, and the text need not be in all of them — only in
+-- at least one; otherwise the render aborts here, naming the name (code-mark
+-- would only see numbers). A prefix that is no name of this block stays as it
+-- is, so search text with a colon in it (`std::cout`) keeps working.
+function M.resolve_marks(spec, names, code_block)
+	if not spec or spec == "" or next(names) == nil then
+		return spec
+	end
+	local lines = {}
+	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
+		table.insert(lines, line)
+	end
+	local out = {}
+	for _, entry in ipairs(split_marks(spec)) do
+		local name, text = entry:match("^%s*(" .. NAME .. "):(.*)$")
+		if name and not name:match("^%d+$") and names[name] then
+			local plain = text:gsub("\\;", ";")
+			local found = false
+			for _, n in ipairs(names[name]) do
+				if plain ~= "" and lines[n]:find(plain, 1, true) then
+					table.insert(out, n .. ":" .. text)
+					found = true
+				end
+			end
+			if not found then
+				fail_lines(code_block, "mark text not found in the lines named `" .. name .. "`: " .. plain, nil,
+					"`mark=\"" .. name .. ":text\"` searches the lines ending in `<line=" .. name .. ">` ("
+					.. as_ranges(names[name]) .. ").\n  The search is literal, not a pattern.")
+			end
+		else
+			table.insert(out, entry)
+		end
+	end
+	return table.concat(out, ";")
+end
+
 -- Split explanation steps from `.comment`s, keeping the order within each.
 function M.partition(explanations)
 	local steps, comments = {}, {}
@@ -473,28 +533,6 @@ end
 local function start_from(code_block)
 	local value = code_block.attributes["startFrom"] or code_block.attributes["start-from"]
 	return tonumber(value) or 1
-end
-
--- Splits `;`-separated mark entries, keeping an escaped `\;` (see code-mark.lua).
-local function split_marks(spec)
-	local out, buf = {}, ""
-	local i = 1
-	while i <= #spec do
-		local c = spec:sub(i, i)
-		if c == "\\" and spec:sub(i + 1, i + 1) == ";" then
-			buf = buf .. "\\;"
-			i = i + 2
-		elseif c == ";" then
-			table.insert(out, buf)
-			buf = ""
-			i = i + 1
-		else
-			buf = buf .. c
-			i = i + 1
-		end
-	end
-	table.insert(out, buf)
-	return out
 end
 
 -- The block-level `mark=` divided between the two halves: `N:text` goes to the
