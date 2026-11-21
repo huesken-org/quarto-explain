@@ -22,8 +22,8 @@ local _explain = dofile(pandoc.path.directory(PANDOC_SCRIPT_FILE) .. "/explain-u
 
 local function split_code(block)
 	local probe = block:clone()
-	local n = _explain.take_split(probe)
-	if not n then
+	local at, shown = _explain.take_split(probe)
+	if not at then
 		return nil
 	end
 
@@ -44,7 +44,7 @@ local function split_code(block)
 		return probe
 	end
 
-	local left, right = _explain.split_at(probe, n)
+	local left, right = _explain.split_at(probe, at, shown)
 	return pandoc.Div({ left, right }, pandoc.Attr("", { "split-code" }, {
 		{ "layout", layout },
 		{ "layout-valign", "top" },

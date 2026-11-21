@@ -1,0 +1,18 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a split inside a noshow block would leave it unterminated
+---
+
+## Plain
+
+```{.go}
+// <noshow>
+package main
+// <split>
+import "fmt"
+// </noshow>
+func main() {
+	fmt.Println("hi")
+}
+```

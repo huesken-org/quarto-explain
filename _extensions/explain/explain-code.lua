@@ -151,8 +151,8 @@ end
 -- `lines2=`. explain-parallel-code.lua runs after this filter and renders it,
 -- so both constructs look the same on the slides. On the website and in LaTeX
 -- the block stays whole (the marker is already gone).
-local function split_into_parallel(el, code_block, n, explanations, intro_block)
-	local left, right = _explain.split_at(code_block, n)
+local function split_into_parallel(el, code_block, split, explanations, intro_block)
+	local left, right = _explain.split_at(code_block, split.at, split.shown)
 	local content = pandoc.List({ left, right })
 	if intro_block then
 		content:insert(intro_block)
@@ -160,7 +160,7 @@ local function split_into_parallel(el, code_block, n, explanations, intro_block)
 	for _, exp in ipairs(explanations) do
 		local attr = exp.attr and exp.attr:clone() or pandoc.Attr()
 		attr.attributes["lines"] = nil
-		local l1, l2 = _explain.split_lines(exp.lines, n)
+		local l1, l2 = _explain.split_lines(exp.lines, split.shown)
 		-- One file, so a step that highlights one half dims the other one
 		-- entirely. An empty segment would leave that half bright (in a true
 		-- parallel block it means "nothing happens here"); line 0 matches no
@@ -224,7 +224,8 @@ local function explain_code(el)
 
 	-- The `<split>` marker goes first: it does not count as a line, so nothing
 	-- may count lines before it is gone.
-	local split = _explain.take_split(code_block)
+	local split_at, split_shown = _explain.take_split(code_block)
+	local split = split_at and { at = split_at, shown = split_shown } or nil
 
 	-- `<line=name>` comments out of the code, names in `lines=` and `mark=`
 	-- into numbers.

@@ -175,11 +175,13 @@ end
 -- its `split_noshow`. Line numbers in `lines=`/`mark=` count the displayed
 -- code, so a name must skip these too.
 --
--- Returns a set of the hidden line numbers (1-based, in the source).
+-- Returns a set of the hidden line numbers (1-based, in the source), and a
+-- second set of the lines after which a `<noshow>` block is still open — a cut
+-- there would leave it unterminated.
 local function hidden_lines(code_block)
-	local hidden = {}
+	local hidden, open = {}, {}
 	if not code_block.classes:includes("go") then
-		return hidden
+		return hidden, open
 	end
 	local in_noshow = false
 	local n = 0
@@ -196,8 +198,9 @@ local function hidden_lines(code_block)
 		elseif line:match("^%s*//%s*exit:%s*%S+%s*$") then
 			hidden[n] = true
 		end
+		open[n] = in_noshow or nil
 	end
-	return hidden
+	return hidden, open
 end
 
 -- The displayed lines of `code_block`, without the hidden ones.
@@ -535,8 +538,11 @@ end
 -- of the left (its `startFrom` is computed).
 
 -- Removes the marker line from `code_block.text` (in place) and returns the
--- number of lines above it, or nil when there is no marker. Aborts on a second
--- marker or one that would leave a column empty.
+-- number of source lines above it and how many of those are displayed (they
+-- differ by the lines go-cell hides, see `hidden_lines`), or nil when there is
+-- no marker. The first cuts the text, the second is what `lines=`, `mark=` and
+-- `startFrom` count. Aborts on a second marker, on one that would leave a
+-- column empty, and on one inside a `<noshow>` block.
 function M.take_split(code_block)
 	local lang = language_of(code_block)
 	local syntaxes = (lang and COMMENT_SYNTAX[lang]) or ALL_SYNTAX
@@ -568,12 +574,27 @@ function M.take_split(code_block)
 	if not at then
 		return nil
 	end
-	if at == 0 or at == #out then
-		fail_lines(code_block, "`<split>` leaves a column empty", nil,
-			"Put the marker between two lines of code, not at the start or the end of the block.")
-	end
 	code_block.text = table.concat(out, "\n")
-	return at
+	local hidden, in_noshow = hidden_lines(code_block)
+	local shown, total = 0, 0
+	for i = 1, #out do
+		if not hidden[i] then
+			total = total + 1
+			if i <= at then
+				shown = shown + 1
+			end
+		end
+	end
+	if in_noshow[at] then
+		fail_lines(code_block, "`<split>` inside a `<noshow>` block", nil,
+			"Each column would get one half of the block, and go-cell would hide the wrong lines.\n"
+			.. "  Move the marker out of `// <noshow>` … `// </noshow>`.")
+	end
+	if shown == 0 or shown == total then
+		fail_lines(code_block, "`<split>` leaves a column empty", nil,
+			"Put the marker between two displayed lines of code, not at the start or the end of the block.")
+	end
+	return at, shown
 end
 
 -- Aborts the render about a `<split>` block.
@@ -618,25 +639,26 @@ local function split_mark_attr(spec, n, left_text, right_text)
 end
 
 -- The two halves of a block whose marker `take_split` has removed: the first
--- `n` lines and the rest. Both keep classes and attributes (`filename` on both,
+-- `at` source lines and the rest; `shown` of those `at` are displayed. Both keep classes and attributes (`filename` on both,
 -- so the columns line up); the right one gets the continued `startFrom` and
 -- loses the id.
-function M.split_at(code_block, n)
+function M.split_at(code_block, at, shown)
 	local lines = {}
 	for line in (code_block.text .. "\n"):gmatch("([^\n]*)\n") do
 		table.insert(lines, line)
 	end
 	local left = code_block:clone()
 	local right = code_block:clone()
-	left.text = table.concat(lines, "\n", 1, n)
-	right.text = table.concat(lines, "\n", n + 1, #lines)
+	left.text = table.concat(lines, "\n", 1, at)
+	right.text = table.concat(lines, "\n", at + 1, #lines)
 	right.identifier = ""
 	right.attributes["start-from"] = nil
-	right.attributes["startFrom"] = tostring(start_from(code_block) + n)
+	right.attributes["startFrom"] = tostring(start_from(code_block) + shown)
 
 	local mark = code_block.attributes["mark"]
 	if mark and mark ~= "" then
-		local l, r = split_mark_attr(mark, n, left.text, right.text)
+		local l, r = split_mark_attr(mark, shown,
+			table.concat(displayed_lines(left), "\n"), table.concat(displayed_lines(right), "\n"))
 		left.attributes["mark"] = l ~= "" and l or nil
 		right.attributes["mark"] = r ~= "" and r or nil
 	end

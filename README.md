@@ -253,7 +253,9 @@ block without it. The comment syntax follows the language, as for line names.
 
 The render aborts on a second marker, on one that leaves a column empty, on a
 marker in an executed `.run` block (a runner later in the chain would execute
-two fragments) and on one in `.explain-parallel-code` or the manim constructs.
+two fragments), on one inside a go-cell `// <noshow>` block and on one in
+`.explain-parallel-code` or the manim constructs. Lines go-cell hides do not
+count, as for [line names](#line-names).
 
 ## `stepper`
 

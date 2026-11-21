@@ -1,0 +1,76 @@
+--- exit 0
+--- content input.html
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">a split counts the displayed lines, past go-cell’s hidden ones</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section class="slide level2">
+
+<!-- go-cell (not in this chain) later drops the `<noshow>` block, so the
+left column shows lines 1-3, the right one 4-6: `lines="4"` and `4:Report` go
+right as line 1, and the right column starts at 4. -->
+</section>
+<section id="explain" class="slide level2">
+<h2>Explain</h2>
+<div class="stepper">
+<div class="quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-code-fragment-index="0" data-code-line-numbers="2|0"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb1-1"><a href="" aria-label="1"></a><span class="co">// &lt;noshow&gt;</span></span>
+<span id="cb1-2"><a href="" aria-label="2"></a><span class="kw">package</span> main</span>
+<span id="cb1-3"><a href="" aria-label="3"></a><span class="co">// &lt;/noshow&gt;</span></span>
+<span id="cb1-4"><a href="" aria-label="4"></a><span class="kw">func</span> Inc<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-5"><a href="" aria-label="5"></a>    n<span class="op">++</span></span>
+<span id="cb1-6"><a href="" aria-label="6"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-mark="1:Report" data-startfrom="4" data-code-fragment-index="0" data-code-line-numbers="0|1"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 3;"><span id="cb2-4"><a href="" aria-label="4"></a><span class="kw">func</span> Report<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="" aria-label="5"></a>    fmt<span class="op">.</span>Println<span class="op">(</span>n<span class="op">)</span></span>
+<span id="cb2-6"><a href="" aria-label="6"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<p>Count.</p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<p>Report.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="plain" class="slide level2">
+<h2>Plain</h2>
+<div class="split-code quarto-layout-panel" data-layout="[0.5, 0.5]">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go"><span id="cb3-1"><a href="" aria-label="1"></a><span class="co">// &lt;noshow&gt;</span></span>
+<span id="cb3-2"><a href="" aria-label="2"></a><span class="kw">package</span> main</span>
+<span id="cb3-3"><a href="" aria-label="3"></a><span class="co">// &lt;/noshow&gt;</span></span>
+<span id="cb3-4"><a href="" aria-label="4"></a><span class="kw">func</span> Inc<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb3-5"><a href="" aria-label="5"></a>    n<span class="op">++</span></span>
+<span id="cb3-6"><a href="" aria-label="6"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-mark="1:Report" data-startfrom="4"><pre class="sourceCode numberSource go number-lines code-with-copy"><code class="sourceCode go" style="counter-reset: source-line 3;"><span id="cb4-4"><a href="" aria-label="4"></a><span class="kw">func</span> Report<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb4-5"><a href="" aria-label="5"></a>    fmt<span class="op">.</span>Println<span class="op">(</span>n<span class="op">)</span></span>
+<span id="cb4-6"><a href="" aria-label="6"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+
+</section>
+    </div>
+--- assets
+explain-revealjs.css
+explain.css
+stepper-revealjs.css
+stepper-revealjs.js
+stepper-video.js
+--- warnings

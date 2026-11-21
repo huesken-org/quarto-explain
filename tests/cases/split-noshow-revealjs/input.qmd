@@ -1,0 +1,49 @@
+---
+format: revealjs
+filters: [explain, stepper]
+title: a split counts the displayed lines, past go-cell's hidden ones
+---
+
+<!-- go-cell (not in this chain) later drops the `<noshow>` block, so the
+left column shows lines 1-3, the right one 4-6: `lines="4"` and `4:Report` go
+right as line 1, and the right column starts at 4. -->
+
+## Explain
+
+::: {.explain-code}
+```{.go mark="4:Report"}
+// <noshow>
+package main
+// </noshow>
+func Inc() {
+	n++
+}
+// <split>
+func Report() {
+	fmt.Println(n)
+}
+```
+
+:::: {lines="2"}
+Count.
+::::
+
+:::: {lines="4"}
+Report.
+::::
+:::
+
+## Plain
+
+```{.go mark="4:Report"}
+// <noshow>
+package main
+// </noshow>
+func Inc() {
+	n++
+}
+// <split>
+func Report() {
+	fmt.Println(n)
+}
+```
