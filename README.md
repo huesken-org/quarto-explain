@@ -192,6 +192,9 @@ Report a full column.
 :::
 ````
 
+A line can carry several names, comma-separated: `// <line=find,full>` puts
+the line into both `find` and `full`.
+
 The comments are removed from the output, so the reader sees neither them nor
 the whitespace in front of them, and `mark=` searches the code without them.
 

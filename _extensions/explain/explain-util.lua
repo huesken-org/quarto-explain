@@ -80,7 +80,8 @@ end
 --     ```
 --     :::: {lines="full,2"}
 --
--- A name stands for every line carrying it. The comment is removed from the
+-- A name stands for every line carrying it; a line may carry several names,
+-- comma-separated: `// <line=find,full>`. The comment is removed from the
 -- displayed code, together with the whitespace in front of it — before
 -- `code-mark` searches the code and before anything counts lines.
 --
@@ -130,6 +131,22 @@ table.sort(ALL_SYNTAX, function(a, b)
 end)
 
 local NAME = "[%w_%-]+"
+-- One or more names, comma-separated: `<line=find,full>`. Lua patterns have no
+-- repeated groups, so this is the loose form; `split_names` checks each name.
+local NAMES = "[%w_%-][%w_%-,%s]*"
+
+-- "a, b" -> { "a", "b" }; nil when an entry is empty or not a NAME.
+local function split_names(list)
+	local names = {}
+	for entry in (list .. ","):gmatch("([^,]*),") do
+		local name = entry:match("^%s*(.-)%s*$")
+		if not name:match("^" .. NAME .. "$") then
+			return nil
+		end
+		table.insert(names, name)
+	end
+	return names
+end
 
 local function pattern_escape(s)
 	return (s:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0"))
@@ -237,22 +254,28 @@ function M.take_line_names(code_block)
 			shown = shown + 1
 		end
 		for _, syntax in ipairs(syntaxes) do
-			local pattern = "^(.-)%s*" .. pattern_escape(syntax[1]) .. "%s*<line=(" .. NAME .. ")>%s*"
+			local pattern = "^(.-)%s*" .. pattern_escape(syntax[1]) .. "%s*<line=(" .. NAMES .. ")>%s*"
 				.. pattern_escape(syntax[2]) .. "%s*$"
-			local code, name = line:match(pattern)
-			if code then
+			local code, list = line:match(pattern)
+			local line_names = code and split_names(list)
+			if line_names then
 				if hidden[n] then
-					fail_lines(code_block, "line " .. n .. ": `<line=" .. name .. ">` on a hidden line", nil,
+					fail_lines(code_block, "line " .. n .. ": `<line=" .. list .. ">` on a hidden line", nil,
 						"The line is inside `// <noshow>` … `// </noshow>` and never shown, so nothing\n"
 						.. "  can be highlighted or marked there. Name a visible line instead.")
 				end
 				line = code
-				names[name] = names[name] or {}
-				table.insert(names[name], shown)
+				for _, name in ipairs(line_names) do
+					names[name] = names[name] or {}
+					-- `<line=a,a>` names the line once
+					if names[name][#names[name]] ~= shown then
+						table.insert(names[name], shown)
+					end
+				end
 				break
 			end
 		end
-		if line:match("<line=" .. NAME .. ">%s*%S*%s*$") then
+		if line:match("<line=" .. NAMES .. ">%s*%S*%s*$") then
 			local expected = {}
 			for _, syntax in ipairs(syntaxes) do
 				table.insert(expected, "`" .. syntax[1] .. " <line=name>" .. (syntax[2] ~= "" and " " .. syntax[2] or "") .. "`")
